@@ -20,26 +20,29 @@ Create a robust, general-purpose event tagging microservice that:
 
 **Deliverables:**
 
--   [x] Separate `ml-event-tagger` repo
--   [x] TensorFlow/Keras Sequential model for tag prediction
--   [x] Static labeled dataset (`data/labeled_events.json`)
--   [x] Training pipeline (`train.py` and notebook)
--   [x] FastAPI service with `/predict` endpoint
--   [x] Client-side CMF integration (background tag fetch)
--   [x] Architecture and documentation (README + ARCHITECTURE.md)
+-   [ ] Separate `ml-event-tagger` repo with clean structure
+-   [ ] TensorFlow/Keras Sequential model for tag prediction
+-   [ ] Labeled dataset (start with 20 events for pipeline validation, scale to 100)
+-   [ ] Training pipeline (`train.py` and notebook with evaluation plots)
+-   [ ] FastAPI service with `/predict` and `/health` endpoints
+-   [ ] Documentation (README, ARCHITECTURE, implementation guides)
+-   [ ] Docker deployment setup
 
 **Success Criteria:**
 
--   Model achieves ≥70% precision on validation data
--   API responds under 300ms per event
--   Tags are contextually relevant
+-   Model achieves ≥60% macro-averaged precision on validation data
+-   API responds under 300ms per event (p95 latency)
+-   Working end-to-end pipeline (train → save → serve → predict)
+-   Clone to first prediction: ~10 minutes
 
-### Suggestions
+**Evaluation Outputs:**
 
-A small notebooks/01_train_event_tagger.ipynb to demonstrate metrics understanding that outputs:
+Training notebook demonstrates metrics understanding:
+
 -   Confusion matrix heatmap
 -   Tag frequency bar chart
--   Precision@3 / Recall@3 printed nicely
+-   Precision/Recall per tag
+-   Model performance summary
 
 ---
 
@@ -49,23 +52,23 @@ A small notebooks/01_train_event_tagger.ipynb to demonstrate metrics understandi
 
 **Planned Enhancements:**
 
--   [ ] Adapter to fetch live CMF events (`adapters/cmf/`)
+-   [ ] Expand labeled dataset to 200-300 events
 -   [ ] Auto-label bootstrapper using regex or keyword heuristics
--   [ ] Caching layer (Redis or Supabase table)
+-   [ ] Implement authentication with `ML_API_KEY` and `x-api-key` header
+-   [ ] Add CORS configuration for CMF domain
+-   [ ] Caching layer (Redis or in-memory cache)
+-   [ ] Rate limiting (per API key)
+-   [ ] Basic monitoring and logging (request/error tracking)
 -   [ ] Tag taxonomy versioning
--   [ ] Metrics dashboard (FastAPI `/metrics` or notebook charts)
--   [ ] Add evaluation notebook with precision/recall plots
+-   [ ] Adapter to fetch live CMF events (`adapters/cmf/`)
 
-**Target Outcome:** Sustainable dataset + visible model improvement process.
+**Target Outcome:** Sustainable dataset + operational polish for real-world use.
 
-### Suggestions
+### Documentation & Testing
 
-FastAPI Testing & Demo UX. After deployment:
-
-- Add a /docs route (FastAPI auto-generates Swagger UI — free win).
-- Include a short curl or Postman example in the README.
-- Optionally embed a link like:
-  Try it live → ml-event-tagger.fly.dev/docs
+-   [ ] FastAPI `/docs` route with Swagger UI
+-   [ ] Integration tests with pytest
+-   [ ] Performance benchmarking results
 
 ---
 
@@ -140,4 +143,7 @@ FastAPI Testing & Demo UX. After deployment:
 ## 🧩 Related Docs
 
 -   [README.md](../README.md)
--   [ARCHITECTURE.md](../docs/ARCHITECTURE.md)
+-   [ARCHITECTURE.md](./ARCHITECTURE.md)
+-   [MVP_DECISIONS.md](./MVP_DECISIONS.md)
+-   [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md)
+-   [TAGS.md](./TAGS.md)
