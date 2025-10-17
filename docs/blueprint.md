@@ -1,5 +1,7 @@
 # 🧠 Event Tagging AI Blueprint
 
+Status: initial background and blueprint doc, see README.md and ARCHITECTURE.md for latest source of truth.
+
 ## 🎯 Goal
 
 Build a lightweight AI service that suggests relevant tags for CMF events using TensorFlow/Keras.
