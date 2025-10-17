@@ -12,13 +12,13 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 | --------- | ---------------------- | --------------- | ---------------------- |
 | 1         | Project Setup          | 1-2 hours       | ✅ Complete (v0.0.1)   |
 | 2         | Data Preparation       | 3-5 hours       | ✅ Complete (v0.0.2)   |
-| 3         | Preprocessing Pipeline | 2-3 hours       | ⬜ Not Started         |
+| 3         | Preprocessing Pipeline | 2-3 hours       | ✅ Complete (v0.0.3)   |
 | 4         | Model Training         | 3-4 hours       | ⬜ Not Started         |
 | 5         | API Service            | 2-3 hours       | ⬜ Not Started         |
 | 6         | Testing & Validation   | 1-2 hours       | ⬜ Not Started         |
 | 7         | Docker & Deployment    | 1-2 hours       | ⬜ Not Started         |
 | 8         | Documentation Polish   | 2-3 hours       | ⬜ Not Started         |
-| **Total** | **End-to-End**         | **15-25 hours** | **Phase 2/8 complete** |
+| **Total** | **End-to-End**         | **15-25 hours** | **Phase 3/8 complete** |
 
 ---
 
@@ -203,7 +203,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ---
 
-## Phase 3: Preprocessing Pipeline
+## Phase 3: Preprocessing Pipeline ✅ Complete (v0.0.3)
 
 **Goal:** Build text preprocessing functions.
 

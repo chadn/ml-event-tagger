@@ -17,6 +17,8 @@ models/*.json
 
 # Data
 data/events-raw-fb.json
+data/*.npy
+data/tag_names.json
 
 # IDE
 .vscode/

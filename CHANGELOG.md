@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 2025-10-17 0.0.3
+
+### Implementation
+
+-   Phase 3 complete: Preprocessing pipeline implemented and tested
+-   `ml_event_tagger/preprocess.py` with text cleaning, field combining, and data splitting
+-   Train/val/test split (70/15/15) with 70/15/15 samples
+
+### Added
+
+-   Preprocessing utilities: `clean_text()`, `combine_text_fields()`, `prepare_dataset()`, `split_dataset()`
+-   15 unit tests in `tests/test_preprocess.py` (all passing)
+-   Preprocessed data saved to `data/` (train/val/test .npy files)
+
 ## 2025-10-17 0.0.2
 
 ### Implementation
