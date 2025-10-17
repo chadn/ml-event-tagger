@@ -239,8 +239,11 @@ ml-event-tagger/
 │   ├── ROADMAP.md
 │   ├── MVP_DECISIONS.md
 │   ├── IMPLEMENTATION_PLAN.md
-│   └── TAGS.md
-├── requirements.txt
+│   ├── TAGS.md
+│   └── VERSION_MANAGEMENT.md
+├── pyproject.toml              # Dependencies & project config
+├── requirements.txt            # Legacy (kept for compatibility)
+├── CHANGELOG.md
 ├── Dockerfile
 ├── .gitignore
 └── README.md

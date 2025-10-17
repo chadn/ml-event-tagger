@@ -8,17 +8,17 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ## 📋 Overview
 
-| Phase     | Focus                  | Estimated Time  | Status         |
-| --------- | ---------------------- | --------------- | -------------- |
-| 1         | Project Setup          | 1-2 hours       | ⬜ Not Started |
-| 2         | Data Preparation       | 3-5 hours       | ⬜ Not Started |
-| 3         | Preprocessing Pipeline | 2-3 hours       | ⬜ Not Started |
-| 4         | Model Training         | 3-4 hours       | ⬜ Not Started |
-| 5         | API Service            | 2-3 hours       | ⬜ Not Started |
-| 6         | Testing & Validation   | 1-2 hours       | ⬜ Not Started |
-| 7         | Docker & Deployment    | 1-2 hours       | ⬜ Not Started |
-| 8         | Documentation Polish   | 2-3 hours       | ⬜ Not Started |
-| **Total** | **End-to-End**         | **15-25 hours** |                |
+| Phase     | Focus                  | Estimated Time  | Status                 |
+| --------- | ---------------------- | --------------- | ---------------------- |
+| 1         | Project Setup          | 1-2 hours       | ✅ Complete (v0.0.1)   |
+| 2         | Data Preparation       | 3-5 hours       | ⬜ Not Started         |
+| 3         | Preprocessing Pipeline | 2-3 hours       | ⬜ Not Started         |
+| 4         | Model Training         | 3-4 hours       | ⬜ Not Started         |
+| 5         | API Service            | 2-3 hours       | ⬜ Not Started         |
+| 6         | Testing & Validation   | 1-2 hours       | ⬜ Not Started         |
+| 7         | Docker & Deployment    | 1-2 hours       | ⬜ Not Started         |
+| 8         | Documentation Polish   | 2-3 hours       | ⬜ Not Started         |
+| **Total** | **End-to-End**         | **15-25 hours** | **Phase 1/8 complete** |
 
 ---
 
@@ -109,7 +109,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     ```python
     """Configuration and constants."""
 
-    # Tag taxonomy (19 tags)
+    # Tag taxonomy (21 tags)
     TAGS = [
         "music", "house", "techno", "breaks", "jazz", "rock", "punk", "hiphop", "dj", "band",
         "dance", "yoga", "art", "food",
@@ -133,9 +133,9 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 -   [ ] Set up virtual environment:
     ```bash
-    python3 -m venv .venv
+    uv venv .venv
     source .venv/bin/activate
-    pip install -r requirements.txt
+    uv pip install -e ".[dev]"
     ```
 
 **Success Criteria:**

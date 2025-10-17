@@ -41,9 +41,9 @@ This project showcases practical AI/ML engineering skills:
 ### 1️⃣ Setup Environment
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+uv venv .venv
+source .venv/bin/activate  # or: .venv\Scripts\activate on Windows
+uv pip install -e ".[dev]"
 ```
 
 ### 2️⃣ Train Model

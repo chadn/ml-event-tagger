@@ -51,7 +51,7 @@ This document captures the key architectural and scope decisions made for the v0
 
 ### Size
 
--   **Count:** 19 tags
+-   **Count:** 21 tags
 -   **Rationale:** Manageable to label consistently, diverse enough to show multi-label classification
 
 ### Categories

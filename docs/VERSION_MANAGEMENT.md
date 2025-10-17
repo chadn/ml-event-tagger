@@ -6,7 +6,7 @@ Quick reference for managing versions in ml-event-tagger.
 
 ## 🎯 Current Version
 
-**0.0.4** - Planning Phase
+**0.0.1** - Phase 1 Complete (Project Setup)
 
 ---
 
@@ -14,21 +14,31 @@ Quick reference for managing versions in ml-event-tagger.
 
 ### Primary Source of Truth
 
-**`ml_event_tagger/__init__.py`**
+**`pyproject.toml`** (line 3)
 
-```python
-"""ML Event Tagger - Multi-label event classification service."""
-
-__version__ = "0.0.4"
+```toml
+[project]
+name = "ml-event-tagger"
+version = "0.0.1"  # ← ONLY place you update version
 ```
 
-This is the **single source of truth** for the version number.
+This is the **single source of truth** for the version number (DRY principle).
 
-### Secondary Locations
+### How It Works
 
--   `CHANGELOG.md` - Documents changes for each version
--   FastAPI `/health` endpoint - Returns version at runtime
--   FastAPI app initialization - Shows version in auto-generated docs
+-   **`pyproject.toml`** - Authoritative source
+-   **`ml_event_tagger/__init__.py`** - Reads version dynamically via `importlib.metadata`
+-   **`CHANGELOG.md`** - Documents changes for each version (with dates)
+-   **FastAPI `/health` endpoint** - Returns `__version__` at runtime
+-   **FastAPI app initialization** - Shows version in auto-generated docs
+
+**Code:**
+
+```python
+# ml_event_tagger/__init__.py
+from importlib.metadata import version
+__version__ = version("ml-event-tagger")  # reads from pyproject.toml
+```
 
 ---
 
@@ -50,16 +60,23 @@ MAJOR.MINOR.PATCH
 
 **Our versioning:**
 
--   **0.0.x** - Planning and documentation (no code)
--   **0.1.0** - MVP with working model and API
--   **0.x.0** - Feature additions
+-   **0.0.x** - Development phase (bump patch for each non-trivial commit/feature)
+-   **0.1.0** - MVP complete (all 8 phases done, working model and API)
+-   **0.x.0** - Feature additions (v0.2, v0.3, etc. per ROADMAP)
 -   **1.0.0** - Production ready
 
-### Step 2: Update `__init__.py`
+**Commit strategy:**
 
-```python
-# ml_event_tagger/__init__.py
-__version__ = "0.1.0"  # Update this
+-   Bump patch (0.0.1 → 0.0.2) for each completed phase or significant feature
+-   Bump minor (0.0.x → 0.1.0) when MVP is complete
+-   Document each version in CHANGELOG with date
+
+### Step 2: Update `pyproject.toml`
+
+```toml
+# pyproject.toml
+[project]
+version = "0.1.0"  # Update this ONE place only
 ```
 
 ### Step 3: Update CHANGELOG.md
@@ -87,7 +104,7 @@ Add new section at the top:
 ### Step 4: Commit and Tag
 
 ```bash
-git add ml_event_tagger/__init__.py CHANGELOG.md
+git add pyproject.toml CHANGELOG.md
 git commit -m "chore: bump version to 0.1.0"
 git tag v0.1.0
 git push origin main --tags
@@ -139,16 +156,9 @@ async def health():
 
 ## 🗓️ Version History
 
-| Version | Date       | Description                              | Status      |
-| ------- | ---------- | ---------------------------------------- | ----------- |
-| 0.0.1   | 2025-10-17 | Initial documentation                    | ✅ Released |
-| 0.0.2   | 2025-10-17 | ROADMAP and tag taxonomy                 | ✅ Released |
-| 0.0.3   | 2025-10-17 | Planning docs (MVP_DECISIONS, IMPL_PLAN) | ✅ Released |
-| 0.0.4   | 2025-10-17 | Updated tags, restructured roadmap       | ✅ Released |
-| 0.1.0   | TBD        | MVP with working code                    | ⏳ Planned  |
-| 0.2.0   | TBD        | Data expansion                           | 🔜 Future   |
-| 0.3.0   | TBD        | Performance & security                   | 🔜 Future   |
-| 1.0.0   | TBD        | Production ready                         | 🧭 Future   |
+**See:** [CHANGELOG.md](../CHANGELOG.md) for complete version history and changes.
+
+**Current progress:** [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) overview table.
 
 ---
 
@@ -160,23 +170,31 @@ async def health():
 // package.json
 {
     "name": "my-app",
-    "version": "0.1.0"
+    "version": "0.1.0" // ← Source of truth
 }
 ```
 
 ### Python (this project)
 
+```toml
+# pyproject.toml
+[project]
+version = "0.0.1"  # ← Source of truth (like package.json)
+```
+
 ```python
-# ml_event_tagger/__init__.py
-__version__ = "0.1.0"
+# ml_event_tagger/__init__.py (reads dynamically)
+from importlib.metadata import version
+__version__ = version("ml-event-tagger")
 ```
 
 **Both approaches:**
 
--   Single source of truth for version
+-   Single source of truth for version (package.json / pyproject.toml)
 -   Updated manually when releasing
 -   Accessible programmatically
 -   Displayed in API/app
+-   Follow same DRY principle
 
 ---
 
@@ -206,11 +224,12 @@ print(ml_event_tagger.__version__)
 
 ## 📝 Best Practices
 
-1. **Always update both** `__init__.py` and `CHANGELOG.md` together
-2. **Use git tags** for releases: `git tag v0.1.0`
-3. **Follow semantic versioning** consistently
-4. **Document breaking changes** clearly in CHANGELOG
-5. **Test the version** appears correctly in `/health` endpoint
+1. **Update ONE place only:** `pyproject.toml` version (DRY principle)
+2. **Always update CHANGELOG.md** when bumping version
+3. **Use git tags** for releases: `git tag v0.1.0`
+4. **Follow semantic versioning** consistently
+5. **Document breaking changes** clearly in CHANGELOG
+6. **Test the version** appears correctly in `/health` endpoint
 
 ---
 
@@ -218,11 +237,11 @@ print(ml_event_tagger.__version__)
 
 When releasing a new version:
 
--   [ ] Update `ml_event_tagger/__init__.py` with new version
+-   [ ] Update `pyproject.toml` with new version (ONLY place to edit)
 -   [ ] Update `CHANGELOG.md` with changes
 -   [ ] Test locally (version appears in `/health`)
 -   [ ] Commit: `git commit -m "chore: bump version to X.Y.Z"`
--   [ ] Tag: `git tag vX.Y.Z`
+-   [ ] Tag: `git tag vX.Y.Z` (optional)
 -   [ ] Push: `git push origin main --tags`
 -   [ ] Deploy to production (if applicable)
 -   [ ] Verify version in deployed `/health` endpoint

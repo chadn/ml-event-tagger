@@ -296,7 +296,7 @@ Ask yourself:
 
 ### MVP (v0.1)
 
--   19 tags total
+-   21 tags total
 -   Music-heavy (reflects CMF data from Oakland/Bay Area)
 -   Added venue/access characteristics (outdoor, indoor, public, private, free)
 -   Removed city-specific tags (Oakland, SF, Berkeley) - location info already in `location` field
