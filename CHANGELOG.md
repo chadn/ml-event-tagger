@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 2025-10-17 0.0.2
+
+### Implementation
+
+-   Phase 2 complete: 100 labeled events dataset
+-   `data/labeled_events.json` created with all 21 tags represented
+
 ## 2025-10-17 0.0.1
 
 ### Implementation

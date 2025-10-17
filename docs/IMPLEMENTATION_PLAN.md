@@ -11,14 +11,14 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 | Phase     | Focus                  | Estimated Time  | Status                 |
 | --------- | ---------------------- | --------------- | ---------------------- |
 | 1         | Project Setup          | 1-2 hours       | ✅ Complete (v0.0.1)   |
-| 2         | Data Preparation       | 3-5 hours       | ⬜ Not Started         |
+| 2         | Data Preparation       | 3-5 hours       | ✅ Complete (v0.0.2)   |
 | 3         | Preprocessing Pipeline | 2-3 hours       | ⬜ Not Started         |
 | 4         | Model Training         | 3-4 hours       | ⬜ Not Started         |
 | 5         | API Service            | 2-3 hours       | ⬜ Not Started         |
 | 6         | Testing & Validation   | 1-2 hours       | ⬜ Not Started         |
 | 7         | Docker & Deployment    | 1-2 hours       | ⬜ Not Started         |
 | 8         | Documentation Polish   | 2-3 hours       | ⬜ Not Started         |
-| **Total** | **End-to-End**         | **15-25 hours** | **Phase 1/8 complete** |
+| **Total** | **End-to-End**         | **15-25 hours** | **Phase 2/8 complete** |
 
 ---
 
@@ -147,17 +147,17 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ---
 
-## Phase 2: Data Preparation
+## Phase 2: Data Preparation ✅ Complete (v0.0.2)
 
 **Goal:** Create labeled dataset with 20 events (validation), scale to 100.
 
 ### Tasks
 
--   [ ] Review existing CMF events in `data/events-raw-fb.json`
+-   [x] Review existing CMF events in `data/events-raw-fb.json`
 
--   [ ] Finalize tag taxonomy (see TAGS.md)
+-   [x] Finalize tag taxonomy (see TAGS.md)
 
--   [ ] Label initial 20 events:
+-   [x] Label initial 20 events:
 
     -   Create `data/labeled_events.json` with structure:
         ```json
@@ -175,24 +175,15 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     -   Apply 2-5 tags per event
     -   Ensure each tag appears at least 3-4 times
 
--   [ ] Test preprocessing on 20 events:
+-   [x] Test preprocessing on 20 events
 
-    ```bash
-    python -c "
-    import json
-    with open('data/labeled_events.json') as f:
-        events = json.load(f)
-    print(f'Loaded {len(events)} events')
-    "
-    ```
+-   [x] Validate pipeline works with small dataset
 
--   [ ] Validate pipeline works with small dataset
+-   [x] Continue labeling to 50 events
 
--   [ ] Continue labeling to 50 events
+-   [x] Continue labeling to 100 events
 
--   [ ] Continue labeling to 100 events
-
--   [ ] Analyze tag distribution:
+-   [x] Analyze tag distribution:
     -   Count events per tag
     -   Identify rare tags (<5 occurrences)
     -   Check for balance

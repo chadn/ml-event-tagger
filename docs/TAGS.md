@@ -347,14 +347,25 @@ Based on CMF event data, expected tag frequency:
 
 ### Recommended Labeling Workflow
 
-1. Open `data/events-raw-fb.json` (reference data)
-2. Create/edit `data/labeled_events.json`
-3. For each event:
-    - Read all fields carefully
-    - Apply tags following guidelines
-    - Add event to labeled dataset
-4. Periodically check tag distribution
-5. Ensure minimum 5 examples per tag
+1.  Open `data/events-raw-fb.json` (reference data)
+2.  Create/edit `data/labeled_events.json`
+3.  For each event:
+    -   Read all fields carefully
+    -   Apply tags following guidelines
+    -   Add event to labeled dataset
+4.  Periodically check tag distribution
+5.  Ensure minimum 5 examples per tag
+6.  Ensure JSON is sorted for easy diff
+
+```bash
+# Sort keys in object, sort values in array, and sort array of objects by object json
+/opt/homebrew/bin/jq -S 'walk(
+    if type == "array" then
+        (if length > 0 and (.[0] | type) == "object" then sort_by(@json) else sort end)
+    else .
+    end
+)' labeled_events.json >sorted.json; /bin/mv sorted.json labeled_events.json
+```
 
 ### Validation Checklist
 
