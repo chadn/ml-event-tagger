@@ -99,20 +99,22 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     ```python
     """ML Event Tagger - Multi-label event classification service."""
 
-    __version__ = "0.1.0"
+    __version__ = "0.1.0"  # Version tracked here (source of truth)
     ```
+
+    **Note:** Version is tracked in `__init__.py` following Python convention. Update both here and CHANGELOG.md when releasing.
 
 -   [ ] Create `ml_event_tagger/config.py` with tag list:
 
     ```python
     """Configuration and constants."""
 
-    # Tag taxonomy (15-20 tags)
+    # Tag taxonomy (19 tags)
     TAGS = [
-        "music", "house", "techno", "jazz", "classical", "rock",
-        "dance", "yoga", "art", "food", "market",
-        "oakland", "sf", "berkeley",
-        "outdoor", "weekly", "community", "family"
+        "music", "house", "techno", "breaks", "jazz", "rock", "punk", "hiphop", "dj", "band",
+        "dance", "yoga", "art", "food",
+        "outdoor", "indoor", "public", "private", "free",
+        "weekly", "community"
     ]
 
     # Model hyperparameters
@@ -164,7 +166,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
                 "id": "event_id",
                 "name": "Event name",
                 "description": "Event description",
-                "formatted_address": "Location address",
+                "location": "Location address",
                 "tags": ["tag1", "tag2", "tag3"]
             }
         ]
@@ -240,7 +242,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
         parts = [
             event.get('name', ''),
             event.get('description', ''),
-            event.get('formatted_address', '')
+            event.get('location', '')
         ]
         return ' '.join(filter(None, parts))
 
@@ -380,8 +382,9 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     from typing import List
     import tensorflow as keras
     import pickle
+    from ml_event_tagger import __version__
 
-    app = FastAPI(title="ML Event Tagger")
+    app = FastAPI(title="ML Event Tagger", version=__version__)
 
     # Load model and tokenizer at startup
     model = None
@@ -397,7 +400,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     class Event(BaseModel):
         name: str
         description: str = ""
-        formatted_address: str = ""
+        location: str = ""
 
     class PredictRequest(BaseModel):
         events: List[Event]
@@ -406,7 +409,8 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     async def health():
         return {
             "status": "healthy",
-            "model_loaded": model is not None
+            "model_loaded": model is not None,
+            "version": __version__
         }
 
     @app.post("/predict")
@@ -441,7 +445,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     # Prediction
     curl -X POST http://localhost:8000/predict \
       -H "Content-Type: application/json" \
-      -d '{"events":[{"name":"Test Event","description":"Test","formatted_address":"Oakland"}]}'
+      -d '{"events":[{"name":"Test Event","description":"Test","location":"Oakland"}]}'
     ```
 
 -   [ ] Verify response format matches spec
@@ -478,9 +482,9 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     def test_predict():
         request = {
             "events": [{
-                "name": "House Music Night",
-                "description": "Dance party",
-                "formatted_address": "Oakland, CA"
+            "name": "House Music Night",
+            "description": "Dance party",
+            "location": "Oakland, CA"
             }]
         }
         response = client.post("/predict", json=request)

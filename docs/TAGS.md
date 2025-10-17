@@ -22,57 +22,60 @@ A controlled vocabulary of 15-20 tags covering common event characteristics in t
 
 ## 📋 Complete Tag List
 
-### Music Genres (6 tags)
+### Music Genres & Performers (8 tags)
 
-| Tag         | Definition                      | Example Events                       |
-| ----------- | ------------------------------- | ------------------------------------ |
-| `music`     | General music event (any genre) | Concerts, DJ sets, jam sessions      |
-| `house`     | House music specifically        | "Days Like This", "ELEMENTS"         |
-| `techno`    | Techno music                    | Underground raves, techno parties    |
-| `jazz`      | Jazz music                      | Jazz clubs, jazz festivals           |
-| `classical` | Classical/orchestral music      | Symphony performances, chamber music |
-| `rock`      | Rock music                      | Rock concerts, indie shows           |
+| Tag      | Definition                      | Example Events                       |
+| -------- | ------------------------------- | ------------------------------------ |
+| `music`  | General music event (any genre) | Concerts, DJ sets, jam sessions      |
+| `house`  | House music specifically        | "Days Like This", "ELEMENTS"         |
+| `techno` | Techno music                    | Underground raves, techno parties    |
+| `breaks` | Breaks/breakbeat music          | Breakbeat parties, jungle nights     |
+| `jazz`   | Jazz music                      | Jazz clubs, jazz festivals           |
+| `rock`   | Rock music                      | Rock concerts, indie shows           |
+| `punk`   | Punk music                      | Punk shows, hardcore concerts        |
+| `hiphop` | Hip-hop music                   | Hip-hop shows, rap concerts, cyphers |
+| `dj`     | DJ performance (any genre)      | DJ sets, DJ nights                   |
+| `band`   | Live band performance           | Band concerts, live music with bands |
 
-**Labeling tip:** Use both `music` + specific genre. E.g., "Days Like This - House Music" → [`music`, `house`]
-
----
-
-### Activities (5 tags)
-
-| Tag      | Definition                  | Example Events                                 |
-| -------- | --------------------------- | ---------------------------------------------- |
-| `dance`  | Dancing is primary activity | Dance parties, nightclubs, dance classes       |
-| `yoga`   | Yoga or meditation event    | Yoga classes, outdoor yoga, meditation circles |
-| `art`    | Art-focused event           | Gallery openings, art markets, exhibitions     |
-| `food`   | Food is primary focus       | Food festivals, farmers markets, tastings      |
-| `market` | Market or bazaar            | Farmers markets, craft fairs, flea markets     |
-
-**Labeling tip:** Can combine with other tags. E.g., "Art Market" → [`art`, `market`]
+**Labeling tip:** Use both `music` + specific genre + performer type. E.g., "DJ spinning house music" → [`music`, `house`, `dj`]
 
 ---
 
-### Locations (3 tags)
+### Activities (4 tags)
 
-| Tag        | Definition             | Example Events           |
-| ---------- | ---------------------- | ------------------------ |
-| `oakland`  | Event in Oakland       | Any Oakland-based event  |
-| `sf`       | Event in San Francisco | Any SF-based event       |
-| `berkeley` | Event in Berkeley      | Any Berkeley-based event |
+| Tag     | Definition                  | Example Events                                 |
+| ------- | --------------------------- | ---------------------------------------------- |
+| `dance` | Dancing is primary activity | Dance parties, nightclubs, dance classes       |
+| `yoga`  | Yoga or meditation event    | Yoga classes, outdoor yoga, meditation circles |
+| `art`   | Art-focused event           | Gallery openings, art exhibitions              |
+| `food`  | Food is primary focus       | Food festivals, tastings, food trucks          |
 
-**Labeling tip:** Use formatted_address field to determine. If address contains "Oakland, CA" → [`oakland`]
+**Labeling tip:** Can combine with other tags. E.g., "Dance party with DJ" → [`dance`, `music`, `dj`]
 
 ---
 
-### Characteristics (4 tags)
+### Access & Venue (5 tags)
 
-| Tag         | Definition                  | Example Events                              |
-| ----------- | --------------------------- | ------------------------------------------- |
-| `outdoor`   | Outdoor/open-air event      | Park events, outdoor concerts, street fairs |
-| `weekly`    | Recurring weekly event      | "Days Like This" (every Friday)             |
-| `community` | Community-focused gathering | Neighborhood events, community meetings     |
-| `family`    | Family-friendly event       | Kids' events, all-ages shows                |
+| Tag       | Definition            | Example Events                 |
+| --------- | --------------------- | ------------------------------ |
+| `outdoor` | Outdoor/open-air      | Park events, outdoor concerts  |
+| `indoor`  | Indoor venue          | Club events, indoor concerts   |
+| `public`  | Open to public        | Public events, open gatherings |
+| `private` | Private/invite-only   | Private parties, member events |
+| `free`    | Free admission/no fee | Free concerts, no-cover events |
 
-**Labeling tip:** These describe event properties. E.g., an outdoor weekly house music event → [`music`, `house`, `outdoor`, `weekly`, `oakland`]
+**Labeling tip:** Location characteristics describe the venue. E.g., a free outdoor concert → [`music`, `outdoor`, `free`, `public`]
+
+---
+
+### Other Characteristics (2 tags)
+
+| Tag         | Definition                  | Example Events                          |
+| ----------- | --------------------------- | --------------------------------------- |
+| `weekly`    | Recurring weekly event      | "Days Like This" (every Friday)         |
+| `community` | Community-focused gathering | Neighborhood events, community meetings |
+
+**Labeling tip:** These describe event properties. E.g., a weekly outdoor house music event → [`music`, `house`, `outdoor`, `weekly`]
 
 ---
 
@@ -86,9 +89,9 @@ A controlled vocabulary of 15-20 tags covering common event characteristics in t
 
 **Examples:**
 
--   "Days Like This - House Music" → [`music`, `house`, `dance`, `oakland`, `weekly`] (5 tags ✅)
--   "SF Jazz Festival" → [`music`, `jazz`, `sf`] (3 tags ✅)
--   "Lake Merritt Farmers Market" → [`food`, `market`, `oakland`, `outdoor`] (4 tags ✅)
+-   "Days Like This - House Music" → [`music`, `house`, `dj`, `dance`, `outdoor`, `weekly`] (6 tags ✅)
+-   "Jazz Festival" → [`music`, `jazz`, `band`, `outdoor`] (4 tags ✅)
+-   "Food Vendors" → [`food`, `outdoor`, `public`] (3 tags ✅)
 
 ### Tag Selection Process
 
@@ -137,18 +140,19 @@ A controlled vocabulary of 15-20 tags covering common event characteristics in t
 {
     "name": "Days Like This - House Music",
     "description": "Weekly house music gathering with local DJs",
-    "formatted_address": "599 El Embarcadero, Oakland, CA 94610"
+    "location": "The Pergola at Lake Merritt, 599 El Embarcadero, Oakland, CA 94610"
 }
 ```
 
-**Tags:** [`music`, `house`, `dance`, `oakland`, `weekly`]
+**Tags:** [`music`, `house`, `dj`, `dance`, `outdoor`, `weekly`]
 
 **Rationale:**
 
 -   `music` - Music event
 -   `house` - House music genre
+-   `dj` - DJs performing
 -   `dance` - Dancing is primary activity
--   `oakland` - Location in Oakland
+-   `outdoor` - Pergola at Lake Merritt is outdoor
 -   `weekly` - "Weekly" in description
 
 ---
@@ -159,20 +163,20 @@ A controlled vocabulary of 15-20 tags covering common event characteristics in t
 
 ```json
 {
-    "name": "ELEMENTS House Music?",
-    "description": "ELEMENTS is a monthly dance ritual centered around deep & soulful house music in Oakland",
-    "formatted_address": ""
+    "name": "ELEMENTS House Music",
+    "description": "Monthly dance ritual centered around deep & soulful house music",
+    "location": "Oakland, CA"
 }
 ```
 
-**Tags:** [`music`, `house`, `dance`, `oakland`, `community`]
+**Tags:** [`music`, `house`, `dance`, `dj`, `community`]
 
 **Rationale:**
 
 -   `music` - Music event
 -   `house` - House music explicitly stated
 -   `dance` - "dance ritual"
--   `oakland` - Stated in description (address missing)
+-   `dj` - DJ-driven event
 -   `community` - "ritual" suggests community gathering
 -   NOT `weekly` - It's monthly, not weekly
 
@@ -185,20 +189,21 @@ A controlled vocabulary of 15-20 tags covering common event characteristics in t
 ```json
 {
     "name": "House+ Skates Second Sunday",
-    "description": "DJ's Play House and techno",
-    "formatted_address": "288 9th Ave, Oakland, CA 94606"
+    "description": "DJs play house and techno music",
+    "location": "288 9th Ave, Oakland, CA 94606"
 }
 ```
 
-**Tags:** [`music`, `house`, `techno`, `oakland`, `outdoor`]
+**Tags:** [`music`, `house`, `techno`, `dj`, `outdoor`, `free`]
 
 **Rationale:**
 
 -   `music` - DJs playing music
 -   `house` - House mentioned
 -   `techno` - Techno mentioned
--   `oakland` - Oakland address
+-   `dj` - DJ performance
 -   `outdoor` - Brooklyn Basin is outdoor area
+-   `free` - Typical for this event
 -   NOT `weekly` - Says "Second Sunday" (monthly)
 
 ---
@@ -209,20 +214,21 @@ A controlled vocabulary of 15-20 tags covering common event characteristics in t
 
 ```json
 {
-    "name": "San Francisco Jazz Festival",
+    "name": "Jazz Festival",
     "description": "Annual jazz festival featuring local and international artists",
-    "formatted_address": "San Francisco, CA"
+    "location": "San Francisco, CA"
 }
 ```
 
-**Tags:** [`music`, `jazz`, `sf`, `outdoor`]
+**Tags:** [`music`, `jazz`, `band`, `outdoor`, `public`]
 
 **Rationale:**
 
 -   `music` - Music event
 -   `jazz` - Jazz festival
--   `sf` - San Francisco
--   `outdoor` - Typical for festivals (could verify from description)
+-   `band` - Live band performances
+-   `outdoor` - Typical for festivals
+-   `public` - Open to public
 -   NOT `weekly` - It's annual
 
 ---
@@ -233,21 +239,20 @@ A controlled vocabulary of 15-20 tags covering common event characteristics in t
 
 ```json
 {
-    "name": "Lake Merritt Farmers Market",
+    "name": "Lake Merritt Food Vendors",
     "description": "Fresh produce, artisan goods, and local food vendors",
-    "formatted_address": "Lake Merritt, Oakland, CA"
+    "location": "Lake Merritt, Oakland, CA"
 }
 ```
 
-**Tags:** [`food`, `market`, `oakland`, `outdoor`, `weekly`]
+**Tags:** [`food`, `outdoor`, `weekly`, `public`]
 
 **Rationale:**
 
 -   `food` - Food vendors
--   `market` - Farmers market
--   `oakland` - Oakland location
--   `outdoor` - Outdoor market
--   `weekly` - Most farmers markets are weekly (verify if stated)
+-   `outdoor` - Outdoor event
+-   `weekly` - Most farmers markets are weekly
+-   `public` - Open to public
 
 ---
 
@@ -268,8 +273,8 @@ Ask yourself:
 
 ❌ **Over-tagging:** Don't add every possible tag
 
--   Bad: [`music`, `house`, `techno`, `dance`, `oakland`, `outdoor`, `weekly`, `community`, `family`] (9 tags)
--   Good: [`music`, `house`, `oakland`, `weekly`] (4 tags)
+-   Bad: [`music`, `house`, `techno`, `dance`, `dj`, `band`, `outdoor`, `indoor`, `weekly`, `community`] (10 tags)
+-   Good: [`music`, `house`, `dj`, `outdoor`, `weekly`] (5 tags)
 
 ❌ **Under-tagging:** Don't be too minimal
 
@@ -280,10 +285,10 @@ Ask yourself:
 
 -   If address is empty or vague, skip location tag
 
-❌ **Inconsistent genre use:** Always use `music` + genre
+❌ **Inconsistent genre use:** Always use `music` + genre + performer type if applicable
 
 -   Bad: [`house`] (missing music tag)
--   Good: [`music`, `house`] (both tags)
+-   Good: [`music`, `house`, `dj`] (complete tags)
 
 ---
 
@@ -291,9 +296,10 @@ Ask yourself:
 
 ### MVP (v0.1)
 
--   18 tags total
--   Focused on Oakland/Bay Area events
--   Music-heavy (reflects CMF data)
+-   19 tags total
+-   Music-heavy (reflects CMF data from Oakland/Bay Area)
+-   Added venue/access characteristics (outdoor, indoor, public, private, free)
+-   Removed city-specific tags (Oakland, SF, Berkeley) - location info already in `location` field
 
 ### Future (v0.2+)
 
@@ -319,19 +325,19 @@ Based on CMF event data, expected tag frequency:
 
 **High frequency (30%+ of events):**
 
--   `music`, `oakland`
+-   `music`, `outdoor`, `public`
 
 **Medium frequency (10-30%):**
 
--   `house`, `dance`, `outdoor`, `weekly`
+-   `house`, `dance`, `dj`, `weekly`, `free`
 
 **Low frequency (5-10%):**
 
--   `techno`, `jazz`, `sf`, `community`
+-   `techno`, `jazz`, `community`, `band`, `indoor`
 
 **Rare (<5%):**
 
--   `classical`, `rock`, `yoga`, `art`, `food`, `market`, `berkeley`, `family`
+-   `breaks`, `rock`, `punk`, `hiphop`, `yoga`, `art`, `food`, `private`
 
 **Note:** This distribution will affect model performance. Rare tags will be harder to predict accurately.
 

@@ -54,15 +54,10 @@ Training notebook demonstrates metrics understanding:
 
 -   [ ] Expand labeled dataset to 200-300 events
 -   [ ] Auto-label bootstrapper using regex or keyword heuristics
--   [ ] Implement authentication with `ML_API_KEY` and `x-api-key` header
--   [ ] Add CORS configuration for CMF domain
--   [ ] Caching layer (Redis or in-memory cache)
--   [ ] Rate limiting (per API key)
--   [ ] Basic monitoring and logging (request/error tracking)
 -   [ ] Tag taxonomy versioning
 -   [ ] Adapter to fetch live CMF events (`adapters/cmf/`)
 
-**Target Outcome:** Sustainable dataset + operational polish for real-world use.
+**Target Outcome:** Improved model accuracy through larger, higher-quality dataset.
 
 ### Documentation & Testing
 
@@ -72,7 +67,26 @@ Training notebook demonstrates metrics understanding:
 
 ---
 
-## 🧠 v0.3 — Smarter Models & Retraining
+## 🔒 v0.3 — Performance & Security
+
+**Goal:** Add production-ready infrastructure features.
+
+**Planned Enhancements:**
+
+-   [ ] API key authentication with `ML_API_KEY` and `x-api-key` header
+-   [ ] CORS configuration for CMF domain
+-   [ ] Rate limiting (per API key)
+-   [ ] Caching layer (Redis or in-memory cache)
+-   [ ] Basic monitoring and logging (request/error tracking)
+-   [ ] Error tracking and alerting
+
+**Target Outcome:** Production-ready API with proper security and performance optimizations.
+
+**Note:** These features are infrastructure/operations focused, separate from core ML improvements.
+
+---
+
+## 🧠 v0.4 — Smarter Models & Retraining
 
 **Goal:** Improve semantic understanding and add retraining automation.
 
@@ -88,7 +102,7 @@ Training notebook demonstrates metrics understanding:
 
 ---
 
-## 🌐 v0.4 — Broader Data Sources & Open Release
+## 🌐 v0.5 — Broader Data Sources & Open Release
 
 **Goal:** Broaden applicability beyond CMF, with clear extensibility hooks.
 
@@ -133,9 +147,10 @@ Training notebook demonstrates metrics understanding:
 | Version | Focus                               | Status     |
 | ------- | ----------------------------------- | ---------- |
 | v0.1    | MVP — Model + API + Docs            | ✅ Current |
-| v0.2    | Data + Metrics + Caching            | ⏳ Planned |
-| v0.3    | Smart Models + Feedback Loop        | 🔜 Next    |
-| v0.4    | Multi-Source Adapters               | 🧭 Future  |
+| v0.2    | Data Expansion                      | ⏳ Planned |
+| v0.3    | Performance & Security              | ⏳ Planned |
+| v0.4    | Smart Models + Feedback Loop        | 🔜 Next    |
+| v0.5    | Multi-Source Adapters               | 🧭 Future  |
 | v1.0    | Production Quality + Explainability | 🧭 Future  |
 
 ---

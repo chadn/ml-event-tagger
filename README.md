@@ -36,38 +36,6 @@ This project showcases practical AI/ML engineering skills:
 
 ---
 
-## 🧱 Repository Structure
-
-```
-ml-event-tagger/
-├── ml_event_tagger/           # Main Python package
-│   ├── __init__.py
-│   ├── train.py               # Training script
-│   ├── serve.py               # FastAPI app
-│   ├── preprocess.py          # Text preprocessing utilities
-│   ├── model.py               # Model architecture definition
-│   └── config.py              # Configuration & tag taxonomy
-├── notebooks/
-│   └── 01_train_and_evaluate.ipynb  # Training + evaluation plots
-├── models/                     # Saved models (gitignored)
-├── data/
-│   └── labeled_events.json    # Labeled training data (~100 events)
-├── tests/
-│   └── test_api.py            # API tests
-├── docs/
-│   ├── ARCHITECTURE.md        # Technical design
-│   ├── ROADMAP.md             # Product evolution
-│   ├── MVP_DECISIONS.md       # Architectural decisions
-│   ├── IMPLEMENTATION_PLAN.md # Step-by-step guide
-│   └── TAGS.md                # Tag taxonomy
-├── requirements.txt
-├── Dockerfile
-├── .gitignore
-└── README.md
-```
-
----
-
 ## 🚀 Quick Start
 
 ### 1️⃣ Setup Environment
@@ -107,7 +75,7 @@ curl -X POST http://localhost:8000/predict \
     "events": [{
       "name": "Days Like This - House Music",
       "description": "Weekly house music gathering",
-      "formatted_address": "599 El Embarcadero, Oakland, CA 94610"
+      "location": "The Pergola at Lake Merritt, 599 El Embarcadero, Oakland, CA 94610"
     }]
   }'
 ```
@@ -136,12 +104,12 @@ curl -X POST http://localhost:8000/predict \
 
 ## 🏷️ Data & Labeling
 
-**Tag Taxonomy:** 15-20 predefined tags covering event categories:
+**Tag Taxonomy:** ~20 tags covering event categories:
 
--   **Music genres:** music, house, techno, jazz, classical
--   **Activities:** dance, yoga, art, food, market
--   **Locations:** oakland, sf, berkeley
--   **Characteristics:** outdoor, weekly, community, family
+-   **Music & performers:** music, house, techno, breaks, jazz, rock, punk, hiphop, dj, band
+-   **Activities:** dance, yoga, art, food
+-   **Access & venue:** outdoor, indoor, public, private, free
+-   **Other:** weekly, community
 
 See [docs/TAGS.md](docs/TAGS.md) for complete list and definitions.
 
@@ -149,7 +117,7 @@ See [docs/TAGS.md](docs/TAGS.md) for complete list and definitions.
 
 -   Started with 20 events for pipeline validation
 -   Scaled to 100 for robust model training
--   Fields used: `name + description + formatted_address`
+-   Fields used: `name + description + location`
 
 ---
 

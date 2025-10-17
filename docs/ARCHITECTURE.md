@@ -49,7 +49,7 @@ sequenceDiagram
 
 -   Located in `ml_event_tagger/train.py` and `notebooks/`.
 -   Reads labeled data (`data/labeled_events.json`).
--   Preprocesses text: concatenates `name + description + formatted_address`
+-   Preprocesses text: concatenates `name + description + location`
 -   Uses Tokenizer + Sequential Keras model:
     -   Embedding → GlobalAveragePooling1D → Dense(32, relu) → Dense(n_tags, sigmoid)
 -   Data split: 70% train / 15% validation / 15% test
@@ -84,7 +84,7 @@ sequenceDiagram
 
 1. Load labeled events from `data/labeled_events.json`
 2. Preprocess text:
-    - Concatenate: `name + " " + description + " " + formatted_address`
+    - Concatenate: `name + " " + description + " " + location`
     - Lowercase, remove URLs, strip HTML tags
     - Tokenize with max sequence length
 3. Split data: 70% train / 15% validation / 15% test
@@ -114,7 +114,7 @@ sequenceDiagram
         {
             "name": "Days Like This - House Music",
             "description": "Weekly house music gathering with local DJs",
-            "formatted_address": "599 El Embarcadero, Oakland, CA 94610, USA"
+            "location": "The Pergola at Lake Merritt, 599 El Embarcadero, Oakland, CA 94610, USA"
         }
     ]
 }
@@ -140,7 +140,7 @@ sequenceDiagram
 
 **Notes:**
 
--   `formatted_address` is optional but recommended for better predictions
+-   `location` is optional but recommended for better predictions
 -   Returns top-5 tags sorted by confidence (descending)
 -   Confidence values are between 0.0 and 1.0
 
@@ -152,7 +152,7 @@ sequenceDiagram
 {
     "status": "healthy",
     "model_loaded": true,
-    "model_version": "v1_20251017"
+    "version": "0.1.0"
 }
 ```
 
@@ -255,33 +255,7 @@ ml-event-tagger/
 -   Dockerfile with Python 3.11+ slim image
 -   FastAPI with Uvicorn server
 -   Expose port 8080
--   Deploy to Render.com, Fly.io, or Hugging Face Spaces
-
-**Future (v0.2+):**
-
--   API key authentication
--   CORS configuration
--   Rate limiting
--   Monitoring and logging
-
----
-
-## 🧱 Future Improvements
-
-**v0.2:**
-
--   Larger labeled dataset (200-300 events)
--   Authentication and rate limiting
--   Caching layer (Redis or in-memory)
--   Basic monitoring and logging
-
-**v0.3+:**
-
--   TF-Hub sentence encoders for better embeddings
--   Automated labeling heuristics
--   Human feedback retraining loop
--   Model explainability (SHAP or attention visualization)
--   TensorFlow.js export for in-browser inference
+-   Deploy to Render.com (preferred) Fly.io, or Hugging Face Spaces
 
 ---
 

@@ -33,12 +33,12 @@ This document captures the key architectural and scope decisions made for the v0
 ### Data Source
 
 -   **Primary:** CMF event data (Google Calendar events for Oakland/Bay Area)
--   **Format:** JSON with fields: name, description, formatted_address
+-   **Format:** JSON with fields: name, description, location
 -   **Rationale:** Real-world data from actual application, demonstrating practical use case
 
 ### Fields Used for Training
 
--   **Selected:** `name + description + formatted_address`
+-   **Selected:** `name + description + location`
 -   **Excluded:** Google Maps types, URLs, timestamps
 -   **Rationale:**
     -   These three fields contain the most semantic information
@@ -51,15 +51,17 @@ This document captures the key architectural and scope decisions made for the v0
 
 ### Size
 
--   **Count:** 15-20 tags
+-   **Count:** 19 tags
 -   **Rationale:** Manageable to label consistently, diverse enough to show multi-label classification
 
 ### Categories
 
-1. **Music genres:** music, house, techno, jazz, classical, rock
-2. **Activities:** dance, yoga, art, food, market
-3. **Locations:** oakland, sf, berkeley
-4. **Characteristics:** outdoor, weekly, community, family
+1. **Music genres & performers:** music, house, techno, breaks, jazz, rock, punk, hiphop, dj, band
+2. **Activities:** dance, yoga, art, food
+3. **Access & venue:** outdoor, indoor, public, private, free
+4. **Other characteristics:** weekly, community
+
+**Note:** Removed city-specific tags (oakland, sf, berkeley) since location info is already in the `location` field and searchable.
 
 ### Labeling Guidelines
 
