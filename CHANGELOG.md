@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 2025-10-17 0.0.4
+
+### Implementation
+
+-   Phase 4 complete: Model training pipeline with TensorFlow/Keras
+-   `ml_event_tagger/model.py` - Sequential model architecture (embedding + pooling + dense layers)
+-   `ml_event_tagger/train.py` - Training loop with early stopping and learning rate reduction
+-   `notebooks/01_train_and_evaluate.ipynb` - Comprehensive training evaluation notebook (12 sections)
+
+### Added
+
+-   Trained model achieving 82.9% binary accuracy, 73.3% precision, 44.0% recall, 55.0% F1 score on test set
+-   Model artifacts saved: `event_tagger_model.h5`, `tokenizer.json`, `model_config.json`
+-   Training history visualization with loss, accuracy, precision, recall plots
+-   Interactive Jupyter notebook with per-tag analysis, sample predictions, and detailed metrics
+
 ## 2025-10-17 0.0.3
 
 ### Implementation

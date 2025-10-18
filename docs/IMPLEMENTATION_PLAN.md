@@ -13,12 +13,12 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 | 1         | Project Setup          | 1-2 hours       | ✅ Complete (v0.0.1)   |
 | 2         | Data Preparation       | 3-5 hours       | ✅ Complete (v0.0.2)   |
 | 3         | Preprocessing Pipeline | 2-3 hours       | ✅ Complete (v0.0.3)   |
-| 4         | Model Training         | 3-4 hours       | ⬜ Not Started         |
+| 4         | Model Training         | 3-4 hours       | ✅ Complete (v0.0.4)   |
 | 5         | API Service            | 2-3 hours       | ⬜ Not Started         |
 | 6         | Testing & Validation   | 1-2 hours       | ⬜ Not Started         |
 | 7         | Docker & Deployment    | 1-2 hours       | ⬜ Not Started         |
 | 8         | Documentation Polish   | 2-3 hours       | ⬜ Not Started         |
-| **Total** | **End-to-End**         | **15-25 hours** | **Phase 3/8 complete** |
+| **Total** | **End-to-End**         | **15-25 hours** | **Phase 4/8 complete** |
 
 ---
 
@@ -28,7 +28,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ### Tasks
 
--   [ ] Create directory structure:
+-   [x] Create directory structure:
 
     ```
     ml-event-tagger/
@@ -47,22 +47,15 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     └── (root files)
     ```
 
--   [ ] Create `requirements.txt`:
+-   [x] Create `requirements.txt`:
 
-    ```
-    tensorflow>=2.13.0,<2.16.0
-    fastapi>=0.104.0
-    uvicorn[standard]>=0.24.0
-    pandas>=2.0.0
-    scikit-learn>=1.3.0
-    numpy>=1.24.0
-    matplotlib>=3.7.0
-    seaborn>=0.12.0
-    python-dotenv>=1.0.0
-    pydantic>=2.0.0
-    ```
+    **Actual:** Created `pyproject.toml` (modern Python packaging standard) as primary source, plus `requirements.txt` for legacy compatibility.
 
--   [ ] Create `.gitignore`:
+    -   `pyproject.toml` includes dependencies, dev dependencies, build config, and tool settings
+    -   `requirements.txt` generated for backwards compatibility
+    -   Using `uv` for fast dependency management
+
+-   [x] Create `.gitignore`:
 
     ```
     # Python
@@ -94,17 +87,22 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     *.log
     ```
 
--   [ ] Create basic `ml_event_tagger/__init__.py`:
+-   [x] Create basic `ml_event_tagger/__init__.py`:
+
+    **Actual:** Created with dynamic version reading from `pyproject.toml`:
 
     ```python
     """ML Event Tagger - Multi-label event classification service."""
 
-    __version__ = "0.1.0"  # Version tracked here (source of truth)
+    from importlib.metadata import version
+    __version__ = version("ml-event-tagger")
     ```
 
-    **Note:** Version is tracked in `__init__.py` following Python convention. Update both here and CHANGELOG.md when releasing.
+    **Note:** Version is tracked in `pyproject.toml` (single source of truth) and read dynamically by `__init__.py`. Update `pyproject.toml` version when releasing.
 
--   [ ] Create `ml_event_tagger/config.py` with tag list:
+-   [x] Create `ml_event_tagger/config.py` with tag list:
+
+    **Actual:** Created with 21 tags (removed city-specific tags, added venue/performer/access tags):
 
     ```python
     """Configuration and constants."""
@@ -117,21 +115,15 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
         "weekly", "community"
     ]
 
-    # Model hyperparameters
-    MAX_VOCAB_SIZE = 5000
+    # Model hyperparameters (streamlined for MVP)
+    MAX_VOCAB_SIZE = 10000
     EMBEDDING_DIM = 64
-    MAX_SEQUENCE_LENGTH = 100
-    DENSE_UNITS = 32
+    MAX_SEQUENCE_LENGTH = 200
     BATCH_SIZE = 16
-    EPOCHS = 30
-
-    # Training parameters
-    TRAIN_SPLIT = 0.70
-    VAL_SPLIT = 0.15
-    TEST_SPLIT = 0.15
+    EPOCHS = 50
     ```
 
--   [ ] Set up virtual environment:
+-   [x] Set up virtual environment:
     ```bash
     uv venv .venv
     source .venv/bin/activate
@@ -209,7 +201,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ### Tasks
 
--   [ ] Create `ml_event_tagger/preprocess.py`:
+-   [x] Create `ml_event_tagger/preprocess.py`:
 
     ```python
     """Text preprocessing utilities."""
@@ -247,7 +239,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
         return texts
     ```
 
--   [ ] Test preprocessing:
+-   [x] Test preprocessing:
 
     ```python
     from ml_event_tagger.preprocess import preprocess_events
@@ -260,7 +252,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     print(texts[0])  # Should be cleaned text
     ```
 
--   [ ] Add unit tests in `tests/test_preprocess.py`:
+-   [x] Add unit tests in `tests/test_preprocess.py`:
 
     ```python
     from ml_event_tagger.preprocess import clean_text
@@ -282,13 +274,13 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ---
 
-## Phase 4: Model Training
+## Phase 4: Model Training ✅ Complete (v0.0.4)
 
 **Goal:** Train multi-label classifier and evaluate performance.
 
 ### Tasks
 
--   [ ] Create `ml_event_tagger/model.py`:
+-   [x] Create `ml_event_tagger/model.py`:
 
     ```python
     """Model architecture definition."""
@@ -314,7 +306,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
         return model
     ```
 
--   [ ] Create `ml_event_tagger/train.py`:
+-   [x] Create `ml_event_tagger/train.py`:
 
     -   Load labeled events
     -   Preprocess text
@@ -325,24 +317,27 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     -   Evaluate on test set
     -   Save model, tokenizer, metrics
 
--   [ ] Create training notebook `notebooks/01_train_and_evaluate.ipynb`:
+-   [x] Create training notebook `notebooks/01_train_and_evaluate.ipynb`:
 
-    -   Import and run training
-    -   Visualize results:
-        -   Training/validation loss curves
-        -   Confusion matrix heatmap
-        -   Per-tag precision/recall bar charts
-        -   Tag frequency distribution
-    -   Print summary metrics
-    -   Save plots as images
+    **Actual:** Created comprehensive 12-section notebook (20 KB):
 
--   [ ] Run training:
+    -   Section 1-6: Load data, tokenize, load model, evaluate, make predictions
+    -   Section 7: Training history visualization (4 plots: loss, accuracy, precision, recall)
+    -   Section 8: Per-tag performance analysis (precision/recall/F1 table)
+    -   Section 9: Per-tag precision/recall bar chart
+    -   Section 10: Tag frequency distribution
+    -   Section 11: Sample predictions with confidence scores
+    -   Section 12: Summary and conclusions
+
+    **Note:** Goes beyond `train.py` with interactive exploration, per-tag breakdown, and sample predictions.
+
+-   [x] Run training:
 
     ```bash
     python -m ml_event_tagger.train
     ```
 
--   [ ] Review outputs:
+-   [x] Review outputs:
     -   `models/tagger_v1_YYYYMMDD.h5` exists
     -   `models/tokenizer_v1.pkl` exists
     -   `models/metrics_v1.json` contains precision/recall

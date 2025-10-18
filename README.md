@@ -80,6 +80,12 @@ curl -X POST http://localhost:8000/predict \
   }'
 ```
 
+### Run Unit Tests
+
+```bash
+uv run pytest
+```
+
 ---
 
 ## 🧠 Example Response

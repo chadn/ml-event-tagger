@@ -25,6 +25,7 @@ Create a robust, general-purpose event tagging microservice that:
 -   [ ] Labeled dataset (start with 20 events for pipeline validation, scale to 100)
 -   [ ] Training pipeline (`train.py` and notebook with evaluation plots)
 -   [ ] FastAPI service with `/predict` and `/health` endpoints
+-   [ ] Basic unit tests using `uv run pytest`
 -   [ ] Documentation (README, ARCHITECTURE, implementation guides)
 -   [ ] Docker deployment setup
 
