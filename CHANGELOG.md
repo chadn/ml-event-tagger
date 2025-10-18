@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 2025-10-18 0.0.6
+
+### Implementation
+
+-   Phase 6 complete: Comprehensive testing suite with 25 unit tests (41 total)
+
+### Added
+
+-   `tests/test_serve.py` - 25 tests covering health, predictions, validation, performance, and serialization
+
+### Fixed
+
+-   FastAPI lifespan event handler (replaced deprecated `@app.on_event` with lifespan context manager)
+-   Pydantic V2 compatibility (replaced `class Config` with `model_config = ConfigDict`)
+-   Confidence score serialization (using `@field_serializer` to properly round to 2 decimal places)
+-   Test deprecation warning (replaced `data=` with `content=` in httpx client)
+
 ## 2025-10-17 0.0.5
 
 ### Implementation

@@ -432,6 +432,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     -   Top-5 tags returned per event
 
 -   [x] Test locally - Created `test_api.py` with automated tests
+
     ```bash
     # view details from test demonstrating its working
     pytest tests/test_api.py -v -s
@@ -462,7 +463,7 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ### Tasks
 
--   [ ] Create `tests/test_api.py`:
+-   [x] Create `tests/test_serve.py`:
 
     ```python
     from fastapi.testclient import TestClient
@@ -488,33 +489,41 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
         assert "predictions" in response.json()
     ```
 
--   [ ] Run tests:
+-   [x] Run tests: `pytest tests/test_serve.py -v`
 
-    ```bash
-    pytest tests/
-    ```
+-   [x] 25 comprehensive unit tests covering:
 
--   [ ] Manual testing:
+    -   Health endpoint (4 tests)
+    -   Root endpoint (3 tests)
+    -   Predict endpoint (6 tests)
+    -   Input validation (5 tests)
+    -   Performance benchmarks (2 tests)
+    -   Confidence score validation (3 tests)
+    -   API documentation (3 tests)
+
+-   [x] Manual testing:
 
     -   Test with various event types
     -   Verify predictions make sense
     -   Check edge cases (empty description, etc.)
 
--   [ ] Measure inference latency:
-
-    ```python
-    import time
-    # Test 100 predictions, calculate p95 latency
-    ```
-
--   [ ] Document actual metrics in README
+-   [x] Measure inference latency:
+    -   Single event: <300ms ✅
+    -   Batch (10 events): <1000ms ✅
 
 **Success Criteria:**
 
--   ✅ All tests pass
+-   ✅ All 25 tests pass
 -   ✅ Manual predictions are reasonable
--   ✅ Inference latency meets target (<300ms)
+-   ✅ Inference latency meets target (<300ms for single event)
 -   ✅ No crashes or errors
+
+**Actual:**
+
+-   `tests/test_serve.py` - 25 tests, 350+ lines
+-   Comprehensive test coverage: health checks, predictions, validation, performance, serialization
+-   FastAPI TestClient with lifespan context manager for proper model loading
+-   All tests passing with <5s total runtime
 
 ---
 

@@ -8,9 +8,10 @@ Provides REST API endpoints for:
 import json
 from typing import List, Dict, Any
 from pathlib import Path
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict, field_serializer
 from tensorflow import keras
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
@@ -25,42 +26,45 @@ from ml_event_tagger.preprocess import clean_text, combine_text_fields
 
 class Event(BaseModel):
     """Event input model."""
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "name": "Days Like This - House Music",
+            "description": "Weekly house music gathering with local DJs",
+            "location": "The Pergola at Lake Merritt, 599 El Embarcadero, Oakland, CA 94610, USA"
+        }
+    })
+
     name: str = Field(..., description="Event name", min_length=1)
     description: str = Field(default="", description="Event description")
     location: str = Field(default="", description="Event location (venue + address)")
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "name": "Days Like This - House Music",
-                "description": "Weekly house music gathering with local DJs",
-                "location": "The Pergola at Lake Merritt, 599 El Embarcadero, Oakland, CA 94610, USA"
-            }
-        }
-
 
 class PredictRequest(BaseModel):
     """Prediction request model."""
-    events: List[Event] = Field(..., description="List of events to predict tags for", min_length=1)
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "events": [
-                    {
-                        "name": "Days Like This - House Music",
-                        "description": "Weekly house music gathering",
-                        "location": "The Pergola at Lake Merritt, Oakland, CA"
-                    }
-                ]
-            }
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "events": [
+                {
+                    "name": "Days Like This - House Music",
+                    "description": "Weekly house music gathering",
+                    "location": "The Pergola at Lake Merritt, Oakland, CA"
+                }
+            ]
         }
+    })
+
+    events: List[Event] = Field(..., description="List of events to predict tags for", min_length=1)
 
 
 class TagPrediction(BaseModel):
     """Single tag prediction."""
     tag: str = Field(..., description="Tag name")
     confidence: float = Field(..., description="Confidence score (0-1)", ge=0, le=1)
+
+    @field_serializer('confidence')
+    def serialize_confidence(self, value: float) -> float:
+        """Round confidence to 2 decimal places for JSON output."""
+        return round(value, 2)
 
 
 class EventPrediction(BaseModel):
@@ -81,19 +85,6 @@ class HealthResponse(BaseModel):
 
 
 # ============================================================================
-# FastAPI App
-# ============================================================================
-
-app = FastAPI(
-    title="ML Event Tagger",
-    description="Multi-label event classification service using TensorFlow/Keras",
-    version=__version__,
-    docs_url="/docs",
-    redoc_url="/redoc"
-)
-
-
-# ============================================================================
 # Global State (Model and Tokenizer)
 # ============================================================================
 
@@ -103,14 +94,20 @@ model_config: Dict[str, Any] = None
 
 
 # ============================================================================
-# Model Loading
+# Lifespan Context Manager
 # ============================================================================
 
-def load_model_and_tokenizer():
-    """Load trained model and tokenizer from disk."""
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for loading/unloading model."""
     global model, tokenizer_config, model_config
 
+    # Startup: Load model
     try:
+        print("=" * 80)
+        print("Starting ML Event Tagger API")
+        print("=" * 80)
+
         # Load model
         model_path = Path("models/event_tagger_model.h5")
         if not model_path.exists():
@@ -138,20 +135,32 @@ def load_model_and_tokenizer():
         print(f"✅ Model config loaded from {config_path}")
 
         print(f"✅ Service ready with model vocabulary: {len(tokenizer_config['word_index'])} words")
+        print("=" * 80)
 
     except Exception as e:
         print(f"❌ Error loading model: {e}")
-        raise
+        model = None
+        tokenizer_config = None
+        model_config = None
+
+    yield  # Application runs
+
+    # Shutdown: Clean up (nothing to do for now)
+    print("Shutting down...")
 
 
-@app.on_event("startup")
-async def startup_event():
-    """Load model and tokenizer on startup."""
-    print("=" * 80)
-    print("Starting ML Event Tagger API")
-    print("=" * 80)
-    load_model_and_tokenizer()
-    print("=" * 80)
+# ============================================================================
+# FastAPI App
+# ============================================================================
+
+app = FastAPI(
+    title="ML Event Tagger",
+    description="Multi-label event classification service using TensorFlow/Keras",
+    version=__version__,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    lifespan=lifespan
+)
 
 
 # ============================================================================
@@ -236,9 +245,11 @@ def predict_events(events: List[Event], top_k: int = 5) -> List[EventPrediction]
 
         tags = []
         for idx in top_indices:
+            # Round to 2 decimal places
+            confidence_rounded = float(round(pred[idx], 2))
             tags.append(TagPrediction(
                 tag=TAGS[idx],
-                confidence=float(pred[idx])
+                confidence=confidence_rounded
             ))
 
         results.append(EventPrediction(tags=tags))
