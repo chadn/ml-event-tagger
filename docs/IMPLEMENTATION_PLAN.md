@@ -14,11 +14,11 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 | 2         | Data Preparation       | 3-5 hours       | ✅ Complete (v0.0.2)   |
 | 3         | Preprocessing Pipeline | 2-3 hours       | ✅ Complete (v0.0.3)   |
 | 4         | Model Training         | 3-4 hours       | ✅ Complete (v0.0.4)   |
-| 5         | API Service            | 2-3 hours       | ⬜ Not Started         |
+| 5         | API Service            | 2-3 hours       | ✅ Complete (v0.0.5)   |
 | 6         | Testing & Validation   | 1-2 hours       | ⬜ Not Started         |
 | 7         | Docker & Deployment    | 1-2 hours       | ⬜ Not Started         |
 | 8         | Documentation Polish   | 2-3 hours       | ⬜ Not Started         |
-| **Total** | **End-to-End**         | **15-25 hours** | **Phase 4/8 complete** |
+| **Total** | **End-to-End**         | **15-25 hours** | **Phase 5/8 complete** |
 
 ---
 
@@ -329,6 +329,10 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     -   Section 11: Sample predictions with confidence scores
     -   Section 12: Summary and conclusions
 
+    **Setup:** Added `jupyter` and `ipykernel` to dev dependencies. Created dedicated Jupyter kernel for project.
+
+    **Usage:** In Jupyter, select "Python (ml-event-tagger)" kernel to use project dependencies.
+
     **Note:** Goes beyond `train.py` with interactive exploration, per-tag breakdown, and sample predictions.
 
 -   [x] Run training:
@@ -353,13 +357,22 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ---
 
-## Phase 5: API Service
+## Phase 5: API Service ✅ Complete (v0.0.5)
 
 **Goal:** Build FastAPI service for inference.
 
 ### Tasks
 
--   [ ] Create `ml_event_tagger/serve.py`:
+-   [x] Create `ml_event_tagger/serve.py`:
+
+    **Actual:** Created comprehensive FastAPI service (330 lines):
+
+    -   Pydantic models for request/response validation
+    -   Model and tokenizer loading on startup
+    -   `/health` endpoint with version and model status
+    -   `/predict` endpoint with top-5 predictions and confidence scores
+    -   Auto-generated API docs at `/docs` and `/redoc`
+    -   Comprehensive error handling
 
     ```python
     """FastAPI service for event tag prediction."""
@@ -408,33 +421,30 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
         pass  # Implement
     ```
 
--   [ ] Implement predict endpoint logic:
+-   [x] Implement predict endpoint logic:
 
-    -   Preprocess input events
-    -   Tokenize and pad sequences
-    -   Get model predictions
-    -   Sort by confidence
-    -   Return top-5 tags per event
+    **Actual:** Fully implemented with:
 
--   [ ] Test locally:
+    -   Text preprocessing using existing `clean_text` and `combine_text_fields` functions
+    -   Custom tokenization using saved tokenizer config
+    -   Sequence padding to model's expected length
+    -   Predictions sorted by confidence
+    -   Top-5 tags returned per event
 
+-   [x] Test locally - Created `test_api.py` with automated tests
     ```bash
-    uvicorn ml_event_tagger.serve:app --reload
+    # view details from test demonstrating its working
+    pytest tests/test_api.py -v -s
     ```
 
--   [ ] Test endpoints:
+-   [x] Test endpoints - All tests passing:
 
-    ```bash
-    # Health check
-    curl http://localhost:8000/health
+    -   ✅ Health check returns status, model_loaded, and version
+    -   ✅ Root endpoint provides API information
+    -   ✅ Prediction endpoint handles single and multiple events
+    -   ✅ Response format matches API contract
 
-    # Prediction
-    curl -X POST http://localhost:8000/predict \
-      -H "Content-Type: application/json" \
-      -d '{"events":[{"name":"Test Event","description":"Test","location":"Oakland"}]}'
-    ```
-
--   [ ] Verify response format matches spec
+-   [x] Verify response format matches spec - Confirmed
 
 **Success Criteria:**
 

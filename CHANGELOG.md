@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 2025-10-17 0.0.5
+
+### Implementation
+
+-   Phase 5 complete: FastAPI service with `/predict` and `/health` endpoints
+
+### Added
+
+-   `ml_event_tagger/serve.py` - REST API with auto-generated docs, Pydantic validation, top-5 predictions
+-   `tests/test_api.py` - API integration tests (4 test scenarios)
+-   Jupyter kernel setup for notebooks (added `jupyter` and `ipykernel` to dev dependencies)
+-   Updated `notebooks/01_train_and_evaluate.ipynb` to prevent issues importing due to wrong path
+
+### Fixed
+
+-   Notebook directory detection - automatically finds project root regardless of where Jupyter starts
+
 ## 2025-10-17 0.0.4
 
 ### Implementation
