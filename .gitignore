@@ -10,14 +10,12 @@ env/
 dist/
 build/
 
-# ML artifacts
-models/*.h5
-models/*.keras
-models/*.pkl
-models/tokenizer.json
-models/training_history.json
-models/model_config.json
-models/*.png
+# ML artifacts (training outputs - but keep trained model for deployment!)
+# models/*.h5  <- COMMENTED OUT - we need this for deployment!
+# models/tokenizer.json  <- COMMENTED OUT - we need this for deployment!
+# models/model_config.json  <- COMMENTED OUT - we need this for deployment!
+models/training_history.json  # Optional - not needed for inference
+models/*.png  # Training plots - not needed for inference
 
 # Data
 data/events-raw-fb.json

@@ -35,8 +35,10 @@ tests/
 .coverage
 htmlcov/
 
-# Data files (raw data not needed)
+# Data files (raw data not needed, but keep labeled data)
 data/events-raw-fb.json
+
+# IMPORTANT: Keep models/ directory - it's needed for inference!
 
 # Jupyter
 notebooks/

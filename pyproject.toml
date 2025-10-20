@@ -1,6 +1,6 @@
 [project]
 name = "ml-event-tagger"
-version = "0.0.7"
+version = "0.0.8"
 description = "Multi-label event classification service using TensorFlow/Keras"
 readme = "README.md"
 requires-python = ">=3.11"

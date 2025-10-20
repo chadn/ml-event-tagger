@@ -7,19 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 2025-10-18 0.0.8
+
+-   Phase 7 fixes for render.com docker deployment
+
+## 2025-10-18 0.0.7
+
+-   Phase 7 prepared: Docker configuration ready for containerization
+-   `Dockerfile` - Multi-stage build with Python 3.11-slim, non-root user, health check
+-   `.dockerignore` - Optimized Docker context (excludes tests, docs, raw data)
+-   `docker-test.sh` - Automated Docker build and validation script
+
 ## 2025-10-18 0.0.6
 
 ### Implementation
 
 -   Phase 6 complete: Comprehensive testing suite with 25 unit tests (41 total)
--   Phase 7 prepared: Docker configuration ready for containerization
 
 ### Added
 
 -   `tests/test_serve.py` - 25 tests covering health, predictions, validation, performance, and serialization
--   `Dockerfile` - Multi-stage build with Python 3.11-slim, non-root user, health check
--   `.dockerignore` - Optimized Docker context (excludes tests, docs, raw data)
--   `docker-test.sh` - Automated Docker build and validation script
 
 ### Fixed
 

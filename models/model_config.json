@@ -1,0 +1,29 @@
+{
+  "max_vocab_size": 10000,
+  "max_length": 200,
+  "embedding_dim": 64,
+  "num_tags": 21,
+  "tags": [
+    "music",
+    "house",
+    "techno",
+    "breaks",
+    "jazz",
+    "rock",
+    "punk",
+    "hiphop",
+    "dj",
+    "band",
+    "dance",
+    "yoga",
+    "art",
+    "food",
+    "outdoor",
+    "indoor",
+    "public",
+    "private",
+    "free",
+    "weekly",
+    "community"
+  ]
+}
