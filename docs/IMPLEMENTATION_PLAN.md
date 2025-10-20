@@ -576,10 +576,14 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 **Actual:**
 
--   [Dockerfile](../Dockerfile) - Multi-stage build (builder + runtime), 300MB final image size
+-   [Dockerfile](../Dockerfile) - Multi-stage build (builder + runtime), ~300MB final image size
 -   `.dockerignore` - Excludes unnecessary files (tests, docs, raw data)
 -   `docker-test.sh` - Automated testing script for Docker build and validation
+-   `render.yaml` - Render deployment configuration
+-   `docs/DEPLOYMENT.md` - Complete deployment guide
+-   **Live deployment:** https://ml-event-tagger.onrender.com
 -   Features: Non-root user, health check, optimized caching, uv for fast installs
+-   Fixed `.gitignore` to include trained model files (critical for deployment)
 
 ---
 
@@ -589,23 +593,24 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ### Tasks
 
--   [ ] Update README with:
+-   [x] Update README with:
 
     -   Actual model metrics achieved
     -   Confirmed setup time
     -   Working curl examples
 
--   [ ] Add actual metrics to ARCHITECTURE.md
+-   [x] Add actual metrics to ARCHITECTURE.md
 
--   [ ] Review all docs for consistency
+-   [x] Review all docs for consistency
 
--   [ ] Add screenshots or plots (optional):
+-   [x] Add screenshots or plots:
 
-    -   Confusion matrix
-    -   Precision/recall charts
-    -   Tag distribution
+    -   Confusion matrix (in notebook)
+    -   Precision/recall charts (in notebook)
+    -   Tag distribution (in notebook)
+    -   Training history plots (saved as PNG)
 
--   [ ] Create CHANGELOG.md:
+-   [x] Update CHANGELOG.md:
 
     ```markdown
     # Changelog
@@ -623,19 +628,27 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
     -   Docker deployment ready
     ```
 
--   [ ] Final review checklist:
-    -   [ ] All code has docstrings
-    -   [ ] No hardcoded paths
-    -   [ ] requirements.txt is complete
-    -   [ ] .gitignore covers artifacts
-    -   [ ] README quick start works
-    -   [ ] All links in docs are valid
+-   [x] Final review checklist:
+    -   [x] All code has docstrings
+    -   [x] No hardcoded paths
+    -   [x] pyproject.toml is complete (requirements.txt generated)
+    -   [x] .gitignore covers artifacts
+    -   [x] README quick start works
+    -   [x] All links in docs are valid
 
 **Success Criteria:**
 
 -   ✅ Documentation is complete and accurate
 -   ✅ All examples work as documented
 -   ✅ Project is ready to share
+
+**Actual:**
+
+-   README.md - Updated with live demo URL, actual metrics, deployment badges
+-   ARCHITECTURE.md - Added performance metrics and deployment architecture
+-   All documentation reviewed and updated with actual results
+-   Live deployment: https://ml-event-tagger.onrender.com
+-   41 tests passing, 82.9% model accuracy, all targets exceeded
 
 ---
 

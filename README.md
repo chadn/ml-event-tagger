@@ -1,10 +1,17 @@
 # 🧠 ML Event Tagger
 
-**Machine-learning microservice for tagging event metadata.**
+**Machine-learning microservice for tagging event metadata using TensorFlow/Keras.**
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-success)](https://ml-event-tagger.onrender.com)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
 Originally designed for [CMF](https://cmf.chadnorwood.com) event data but structured for general event tagging tasks.
 
 > **Goal:** Demonstrate TensorFlow/Keras and full-stack ML integration skills with clarity and reproducibility.
 > **Time to first prediction:** ~10 minutes from clone to working API.
+> **🚀 Live Demo:** https://ml-event-tagger.onrender.com
 
 ---
 
@@ -80,10 +87,16 @@ curl -X POST http://localhost:8000/predict \
   }'
 ```
 
-### Run Unit Tests
+### 5️⃣ Run Tests
 
 ```bash
-uv run pytest
+# Run all tests
+uv run pytest tests/ -v
+
+# Run with coverage
+uv run pytest tests/ --cov=ml_event_tagger --cov-report=term-missing
+
+# 41 tests total (25 API tests + 16 preprocessing tests)
 ```
 
 ---
@@ -141,31 +154,74 @@ This allows events to appear immediately on the CMF map, while tags load in the 
 
 ## 🧰 Deployment
 
-Deploy on **Render**, **Fly.io**, or **Hugging Face Spaces** using Docker.
+### 🌐 Live Demo
+
+The API is deployed on Render (free tier):
+
+**URL:** https://ml-event-tagger.onrender.com
 
 ```bash
-docker build -t ml-event-tagger .
-docker run -p 8080:8080 ml-event-tagger
+# Test health endpoint
+curl https://ml-event-tagger.onrender.com/health
+
+# Test prediction
+curl -X POST https://ml-event-tagger.onrender.com/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "events": [{
+      "name": "House Music Night",
+      "description": "DJ performance with dancing",
+      "location": "Oakland, CA"
+    }]
+  }'
 ```
 
-The included `Dockerfile` uses Python 3.11-slim and exposes port 8080.
+⚠️ **Note:** Free tier spins down after 15 min of inactivity. First request may take ~30-60 seconds (cold start).
+
+### 🐳 Docker
+
+Build and run locally:
+
+```bash
+docker build -t ml-event-tagger:latest .
+docker run -p 8000:8000 ml-event-tagger:latest
+```
+
+### 🚀 Deploy to Render
+
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for complete deployment guide.
+
+Quick deploy:
+
+1. Push to GitHub
+2. Connect to Render (auto-detects `render.yaml`)
+3. Deploy (builds in ~5-10 minutes)
 
 ---
 
 ## 📊 Model Performance
 
-**MVP Target Metrics:**
+**Achieved Metrics (Test Set):**
 
--   Macro-averaged precision: ≥60%
--   Macro-averaged recall: ≥40%
--   Inference latency (p95): <300ms per event
+-   ✅ **Binary Accuracy:** 82.9%
+-   ✅ **Precision:** 73.3% (macro-averaged)
+-   ✅ **Recall:** 44.0% (macro-averaged)
+-   ✅ **F1 Score:** 55.0%
+-   ✅ **Inference Latency:** <300ms per event (p95)
 
-See training notebook for detailed evaluation with:
+**Trained on:**
+
+-   100 labeled events
+-   70/15/15 train/val/test split
+-   21 event tags (music genres, activities, venue types)
+
+See [`notebooks/01_train_and_evaluate.ipynb`](notebooks/01_train_and_evaluate.ipynb) for detailed evaluation with:
 
 -   Confusion matrix heatmap
 -   Per-tag precision/recall charts
 -   Training/validation loss curves
 -   Tag frequency distribution
+-   Sample predictions with confidence scores
 
 ---
 

@@ -12,17 +12,27 @@ Develop a minimal, well-structured machine learning microservice that can:
 -   Serve tag predictions via a **FastAPI** endpoint
 -   Integrate with [CMF](https://github.com/chadn/cmf) or other event-based applications
 
+**🚀 Live Demo:** https://ml-event-tagger.onrender.com
+
+**📊 Performance:**
+
+-   Binary Accuracy: 82.9%
+-   Precision: 73.3% | Recall: 44.0% | F1: 55.0%
+-   Inference: <300ms per event
+
 ---
 
 ## 🧱 System Overview
 
 ```
-+------------------------+          +-----------------------+
-|  CMF Client (Next.js)  |  --->    |  ML Event Tagger API  |
-|  /api/events           |          |  /predict (FastAPI)   |
-+------------------------+          +-----------------------+
++------------------------+          +----------------------------------+
+|  CMF Client (Next.js)  |  --->    |  ML Event Tagger API (Render)    |
+|  /api/events           |          |  /predict (FastAPI + TensorFlow) |
++------------------------+          +----------------------------------+
          |                                     |
          |<------ Tags merged later -----------|
+
+Live: https://ml-event-tagger.onrender.com
 ```
 
 ### Integration with CMF
