@@ -114,6 +114,17 @@ async def lifespan(app: FastAPI):
             raise FileNotFoundError(f"Model file not found: {model_path}")
 
         model = keras.models.load_model(str(model_path))
+
+        # Recompile model with metrics to avoid warning
+        model.compile(
+            optimizer='adam',
+            loss='binary_crossentropy',
+            metrics=[
+                keras.metrics.BinaryAccuracy(name='binary_accuracy'),
+                keras.metrics.Precision(name='precision'),
+                keras.metrics.Recall(name='recall')
+            ]
+        )
         print(f"✅ Model loaded from {model_path}")
 
         # Load tokenizer config

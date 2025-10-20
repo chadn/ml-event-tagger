@@ -533,60 +533,53 @@ Step-by-step guide for implementing the ml-event-tagger MVP.
 
 ### Tasks
 
--   [ ] Create `Dockerfile`:
+-   [x] Create `Dockerfile`
 
-    ```dockerfile
-    FROM python:3.11-slim
-
-    WORKDIR /app
-
-    # Install dependencies
-    COPY requirements.txt .
-    RUN pip install --no-cache-dir -r requirements.txt
-
-    # Copy application
-    COPY ml_event_tagger/ ./ml_event_tagger/
-    COPY models/ ./models/
-
-    # Expose port
-    EXPOSE 8080
-
-    # Run server
-    CMD ["uvicorn", "ml_event_tagger.serve:app", "--host", "0.0.0.0", "--port", "8080"]
-    ```
-
--   [ ] Test Docker build:
+-   [x] Test Docker build:
 
     ```bash
-    docker build -t ml-event-tagger .
+    docker build -t ml-event-tagger:0.0.7 .
+    # Or use the test script
+    ./docker-test.sh
     ```
 
--   [ ] Test Docker run:
+-   [x] Test Docker run:
 
     ```bash
-    docker run -p 8080:8080 ml-event-tagger
+    docker run -p 8000:8000 ml-event-tagger:0.0.7
     ```
 
--   [ ] Test containerized API:
+-   [x] Test containerized API:
 
     ```bash
-    curl http://localhost:8080/health
+    curl http://localhost:8000/health
+    curl -X POST http://localhost:8000/predict \
+      -H "Content-Type: application/json" \
+      -d '{"events": [{"name": "Test Event", "description": "Testing", "location": "SF"}]}'
     ```
 
--   [ ] Choose deployment platform (Render, Fly.io, or Hugging Face)
+-   [x] Choose deployment platform (Render, Fly.io, or Hugging Face) - Render chosen
 
 -   [ ] Deploy to chosen platform
 
 -   [ ] Test live endpoint
 
--   [ ] Update README with live demo link (optional)
+-   [ ] Update README with live demo link
 
 **Success Criteria:**
 
 -   ✅ Docker builds successfully
 -   ✅ Container runs locally
 -   ✅ API works in container
--   ✅ Deployment succeeds (optional for MVP)
+-   ✅ Health check passes
+-   ✅ Deployment succeeds
+
+**Actual:**
+
+-   [Dockerfile](../Dockerfile) - Multi-stage build (builder + runtime), 300MB final image size
+-   `.dockerignore` - Excludes unnecessary files (tests, docs, raw data)
+-   `docker-test.sh` - Automated testing script for Docker build and validation
+-   Features: Non-root user, health check, optimized caching, uv for fast installs
 
 ---
 
