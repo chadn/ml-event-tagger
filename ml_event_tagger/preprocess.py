@@ -112,7 +112,13 @@ def prepare_dataset(events: List[Dict]) -> Tuple[List[str], np.ndarray, List[str
         label_vector = [1 if tag in event_tags else 0 for tag in TAGS]
         labels.append(label_vector)
 
-    return texts, np.array(labels), TAGS
+    # Ensure labels array has correct shape even when empty
+    if len(labels) == 0:
+        labels_array = np.empty((0, len(TAGS)), dtype=int)
+    else:
+        labels_array = np.array(labels)
+
+    return texts, labels_array, TAGS
 
 
 def split_dataset(

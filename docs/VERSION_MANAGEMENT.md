@@ -4,12 +4,6 @@ Quick reference for managing versions in ml-event-tagger.
 
 ---
 
-## 🎯 Current Version
-
-**0.0.1** - Phase 1 Complete (Project Setup)
-
----
-
 ## 📍 Where Version is Tracked
 
 ### Primary Source of Truth

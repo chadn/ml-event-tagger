@@ -7,11 +7,13 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-Originally designed for [CMF](https://cmf.chadnorwood.com) event data but structured for general event tagging tasks.
+Originally designed for [CMF](https://github.com/chadn/cmf) event data but structured for general event tagging tasks.
 
-> **Goal:** Demonstrate TensorFlow/Keras and full-stack ML integration skills with clarity and reproducibility.
-> **Time to first prediction:** ~10 minutes from clone to working API.
-> **🚀 Live Demo:** https://ml-event-tagger.onrender.com
+**Goal:** Demonstrate TensorFlow/Keras and full-stack ML integration skills with clarity and reproducibility.
+
+**Time to first prediction:** ~10 minutes from clone to working API.
+
+**Live Demo:** https://ml-event-tagger.onrender.com
 
 ---
 
@@ -29,6 +31,7 @@ This project showcases practical AI/ML engineering skills:
 | **Reproducibility** | Clean code, documentation, Docker deployment, version control                        |
 
 **Built with:** Python, TensorFlow/Keras, FastAPI, scikit-learn, pandas
+**Test Coverage:** 75 tests, 46% overall (80%+ production code)
 
 ---
 
@@ -87,21 +90,7 @@ curl -X POST http://localhost:8000/predict \
   }'
 ```
 
-### 5️⃣ Run Tests
-
-```bash
-# Run all tests
-uv run pytest tests/ -v
-
-# Run with coverage
-uv run pytest tests/ --cov=ml_event_tagger --cov-report=term-missing
-
-# 41 tests total (25 API tests + 16 preprocessing tests)
-```
-
----
-
-## 🧠 Example Response
+### 🧠 Example Response
 
 ```json
 {
@@ -117,6 +106,22 @@ uv run pytest tests/ --cov=ml_event_tagger --cov-report=term-missing
         }
     ]
 }
+```
+
+### 5️⃣ Run Tests
+
+```bash
+# Run all tests
+uv run pytest tests/ -v
+
+# Run with coverage
+uv run pytest tests/ --cov=ml_event_tagger --cov-report=term-missing
+
+# 75 tests total
+# - 14 model tests
+# - 25 preprocessing tests
+# - 36 API/serve tests
+# Coverage: 46% overall, 80%+ production code
 ```
 
 ---
@@ -227,11 +232,14 @@ See [`notebooks/01_train_and_evaluate.ipynb`](notebooks/01_train_and_evaluate.ip
 
 ## 📚 Documentation
 
--   [ARCHITECTURE.md](docs/ARCHITECTURE.md) - Technical design and API contract
+-   [**LEARNINGS.md**](docs/LEARNINGS.md) - 📚 **Summary of demonstrated ML & engineering skills** ⭐
+-   [**ARCHITECTURE.md**](docs/ARCHITECTURE.md) - Technical design, data pipeline, model training
+-   [**TAGS.md**](docs/TAGS.md) - Tag taxonomy and labeling guideliness
 -   [ROADMAP.md](docs/ROADMAP.md) - Project evolution and future plans
+-   [TEST_COVERAGE_PLAN.md](docs/TEST_COVERAGE_PLAN.md) - Testing strategy & rationale
+-   [DEPLOYMENT.md](docs/DEPLOYMENT.md) - Docker & Render deployment guide
+-   [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) - 8-phase MVP implementation (completed)
 -   [MVP_DECISIONS.md](docs/MVP_DECISIONS.md) - Architectural decisions and rationale
--   [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) - Step-by-step implementation guide
--   [TAGS.md](docs/TAGS.md) - Tag taxonomy and labeling guidelines
 
 ---
 

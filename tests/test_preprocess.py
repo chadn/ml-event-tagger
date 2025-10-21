@@ -2,11 +2,16 @@
 
 import pytest
 import numpy as np
+import os
+import json
+import tempfile
 from ml_event_tagger.preprocess import (
     clean_text,
     combine_text_fields,
     prepare_dataset,
-    split_dataset
+    split_dataset,
+    save_preprocessed_data,
+    load_labeled_events
 )
 
 
@@ -184,4 +189,210 @@ class TestSplitDataset:
 
         with pytest.raises(AssertionError):
             split_dataset(texts, labels, 0.5, 0.3, 0.1)  # Sums to 0.9
+
+
+class TestPrepareDatasetEdgeCases:
+    """Edge case tests for prepare_dataset function."""
+
+    def test_prepare_dataset_with_empty_list(self):
+        """Should handle empty event list gracefully."""
+        events = []
+        texts, labels, tag_names = prepare_dataset(events)
+
+        assert len(texts) == 0
+        assert labels.shape == (0, 21)
+        assert len(tag_names) == 21
+
+    def test_prepare_dataset_with_missing_tags(self):
+        """Should handle events without tags field."""
+        events = [
+            {
+                "name": "Test Event",
+                "description": "Test description",
+                "location": "Test location"
+                # No tags field
+            }
+        ]
+        texts, labels, tag_names = prepare_dataset(events)
+
+        assert len(texts) == 1
+        assert np.sum(labels[0]) == 0  # All zeros (no tags)
+
+    def test_prepare_dataset_with_empty_tags(self):
+        """Should handle events with empty tags list."""
+        events = [
+            {
+                "name": "Test Event",
+                "description": "Test description",
+                "location": "Test location",
+                "tags": []
+            }
+        ]
+        texts, labels, tag_names = prepare_dataset(events)
+
+        assert len(texts) == 1
+        assert np.sum(labels[0]) == 0  # All zeros
+
+    def test_prepare_dataset_with_invalid_tags(self):
+        """Should ignore invalid tags not in taxonomy."""
+        events = [
+            {
+                "name": "Test Event",
+                "description": "Test description",
+                "location": "Test location",
+                "tags": ["music", "invalid_tag", "dance", "another_invalid"]
+            }
+        ]
+        texts, labels, tag_names = prepare_dataset(events)
+
+        # Should only count valid tags (music, dance)
+        assert np.sum(labels[0]) == 2
+
+    def test_prepare_dataset_with_none_values(self):
+        """Should handle None values in event fields."""
+        events = [
+            {
+                "name": "Test Event",
+                "description": None,
+                "location": None,
+                "tags": ["music"]
+            }
+        ]
+        texts, labels, tag_names = prepare_dataset(events)
+
+        assert len(texts) == 1
+        assert len(texts[0]) > 0  # Should still have name
+        assert np.sum(labels[0]) == 1  # Should have music tag
+
+
+class TestSavePreprocessedData:
+    """Tests for save_preprocessed_data function."""
+
+    def test_save_creates_files(self):
+        """Should create all required files."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create dummy data
+            train_texts = ["text1", "text2"]
+            train_labels = np.array([[1, 0, 0], [0, 1, 0]])
+            val_texts = ["text3"]
+            val_labels = np.array([[0, 0, 1]])
+            test_texts = ["text4"]
+            test_labels = np.array([[1, 1, 0]])
+            tag_names = ["tag1", "tag2", "tag3"]
+
+            # Save data
+            save_preprocessed_data(
+                train_texts, train_labels,
+                val_texts, val_labels,
+                test_texts, test_labels,
+                tag_names,
+                output_dir=tmpdir
+            )
+
+            # Check files exist
+            assert os.path.exists(os.path.join(tmpdir, "train_texts.npy"))
+            assert os.path.exists(os.path.join(tmpdir, "train_labels.npy"))
+            assert os.path.exists(os.path.join(tmpdir, "val_texts.npy"))
+            assert os.path.exists(os.path.join(tmpdir, "val_labels.npy"))
+            assert os.path.exists(os.path.join(tmpdir, "test_texts.npy"))
+            assert os.path.exists(os.path.join(tmpdir, "test_labels.npy"))
+            assert os.path.exists(os.path.join(tmpdir, "tag_names.json"))
+
+    def test_save_data_can_be_loaded(self):
+        """Saved data can be loaded back correctly."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create dummy data
+            train_texts = ["text1", "text2", "text3"]
+            train_labels = np.array([[1, 0], [0, 1], [1, 1]])
+            val_texts = ["text4"]
+            val_labels = np.array([[0, 1]])
+            test_texts = ["text5"]
+            test_labels = np.array([[1, 0]])
+            tag_names = ["tag1", "tag2"]
+
+            # Save data
+            save_preprocessed_data(
+                train_texts, train_labels,
+                val_texts, val_labels,
+                test_texts, test_labels,
+                tag_names,
+                output_dir=tmpdir
+            )
+
+            # Load data back
+            loaded_train_texts = np.load(os.path.join(tmpdir, "train_texts.npy"), allow_pickle=True)
+            loaded_train_labels = np.load(os.path.join(tmpdir, "train_labels.npy"))
+
+            with open(os.path.join(tmpdir, "tag_names.json")) as f:
+                loaded_tag_names = json.load(f)
+
+            # Verify loaded data matches original
+            assert list(loaded_train_texts) == train_texts
+            np.testing.assert_array_equal(loaded_train_labels, train_labels)
+            assert loaded_tag_names == tag_names
+
+    def test_save_creates_directory_if_not_exists(self):
+        """Should create output directory if it doesn't exist."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Use a nested directory that doesn't exist
+            output_dir = os.path.join(tmpdir, "nested", "output")
+
+            # Create minimal data
+            train_texts = ["text"]
+            train_labels = np.array([[1]])
+            val_texts = ["text"]
+            val_labels = np.array([[1]])
+            test_texts = ["text"]
+            test_labels = np.array([[1]])
+            tag_names = ["tag"]
+
+            # Save should create the directory
+            save_preprocessed_data(
+                train_texts, train_labels,
+                val_texts, val_labels,
+                test_texts, test_labels,
+                tag_names,
+                output_dir=output_dir
+            )
+
+            # Verify directory was created
+            assert os.path.exists(output_dir)
+            assert os.path.isdir(output_dir)
+
+
+class TestLoadLabeledEvents:
+    """Tests for load_labeled_events function."""
+
+    def test_load_labeled_events_returns_list(self):
+        """Should return a list of events."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Create test JSON file
+            test_file = os.path.join(tmpdir, "test_events.json")
+            test_data = [
+                {"name": "Event 1", "tags": ["music"]},
+                {"name": "Event 2", "tags": ["dance"]}
+            ]
+
+            with open(test_file, 'w') as f:
+                json.dump(test_data, f)
+
+            # Load events
+            events = load_labeled_events(test_file)
+
+            assert isinstance(events, list)
+            assert len(events) == 2
+            assert events[0]["name"] == "Event 1"
+
+    def test_load_labeled_events_handles_empty_file(self):
+        """Should handle empty JSON array."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            test_file = os.path.join(tmpdir, "empty_events.json")
+
+            with open(test_file, 'w') as f:
+                json.dump([], f)
+
+            events = load_labeled_events(test_file)
+
+            assert isinstance(events, list)
+            assert len(events) == 0
 

@@ -161,7 +161,7 @@ def save_model_and_artifacts(model, tokenizer, history, models_dir="models"):
     os.makedirs(models_dir, exist_ok=True)
 
     # Save model
-    model_path = f"{models_dir}/event_tagger_model.h5"
+    model_path = f"{models_dir}/event_tagger_model.v1_20251020.h5"
     model.save(model_path)
     print(f"✅ Model saved to {model_path}")
 

@@ -109,7 +109,7 @@ async def lifespan(app: FastAPI):
         print("=" * 80)
 
         # Load model
-        model_path = Path("models/event_tagger_model.h5")
+        model_path = Path("models/event_tagger_model.v1_20251020.h5")
         if not model_path.exists():
             raise FileNotFoundError(f"Model file not found: {model_path}")
 

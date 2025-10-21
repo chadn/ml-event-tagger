@@ -41,7 +41,6 @@ def create_model(
         layers.Embedding(
             input_dim=vocab_size,
             output_dim=embedding_dim,
-            input_length=max_length,
             name='embedding'
         ),
 

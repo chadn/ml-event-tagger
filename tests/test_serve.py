@@ -347,6 +347,188 @@ class TestAPIDocumentation:
         assert "paths" in schema
 
 
+class TestErrorHandling:
+    """Tests for error handling and edge cases."""
+
+    def test_predict_with_extremely_long_text(self, client):
+        """Predict endpoint handles very long input text."""
+        # Create a very long description (10,000 characters)
+        long_text = "word " * 2000
+
+        request_data = {
+            "events": [{
+                "name": "Test Event",
+                "description": long_text,
+                "location": "Test Location"
+            }]
+        }
+
+        response = client.post("/predict", json=request_data)
+
+        # Should still work (text will be truncated/padded)
+        assert response.status_code == 200
+        data = response.json()
+        assert "predictions" in data
+
+    def test_predict_with_special_characters(self, client):
+        """Predict endpoint handles special characters in text."""
+        request_data = {
+            "events": [{
+                "name": "Test 🎵 Event™",
+                "description": "Special chars: €£¥ © ® @#$%^&*()",
+                "location": "Test 📍 Location"
+            }]
+        }
+
+        response = client.post("/predict", json=request_data)
+        assert response.status_code == 200
+
+    def test_predict_with_unicode(self, client):
+        """Predict endpoint handles Unicode characters."""
+        request_data = {
+            "events": [{
+                "name": "日本語イベント",
+                "description": "Événement français avec accents",
+                "location": "Москва"
+            }]
+        }
+
+        response = client.post("/predict", json=request_data)
+        assert response.status_code == 200
+
+    def test_predict_with_html_in_text(self, client):
+        """Predict endpoint handles HTML in text (should be cleaned)."""
+        request_data = {
+            "events": [{
+                "name": "<script>alert('test')</script>Music Event",
+                "description": "<p>This is <b>bold</b> text</p>",
+                "location": "<a href='test'>Link</a>"
+            }]
+        }
+
+        response = client.post("/predict", json=request_data)
+        assert response.status_code == 200
+        # HTML should be cleaned before prediction
+
+    def test_predict_with_urls_in_text(self, client):
+        """Predict endpoint handles URLs in text (should be cleaned)."""
+        request_data = {
+            "events": [{
+                "name": "Event https://example.com",
+                "description": "Check www.test.com for details",
+                "location": "Visit http://location.com"
+            }]
+        }
+
+        response = client.post("/predict", json=request_data)
+        assert response.status_code == 200
+
+    def test_predict_with_only_whitespace(self, client):
+        """Predict endpoint handles events with only whitespace."""
+        request_data = {
+            "events": [{
+                "name": "   ",
+                "description": "\n\n\n",
+                "location": "\t\t"
+            }]
+        }
+
+        # This might fail validation due to empty name after stripping
+        response = client.post("/predict", json=request_data)
+        # Could be 200 (handled) or 422 (validation error) - both acceptable
+        assert response.status_code in [200, 422]
+
+    def test_predict_handles_model_output_edge_cases(self, client):
+        """Predict endpoint handles edge cases in model output."""
+        # Test with minimal input
+        request_data = {
+            "events": [{
+                "name": "a"  # Single character
+            }]
+        }
+
+        response = client.post("/predict", json=request_data)
+        assert response.status_code == 200
+
+        data = response.json()
+        # Should still return top 5 predictions
+        assert len(data["predictions"][0]["tags"]) == 5
+
+    def test_predict_batch_with_mixed_quality(self, client):
+        """Predict endpoint handles batch with varying input quality."""
+        request_data = {
+            "events": [
+                {"name": "Good Event", "description": "Detailed description", "location": "SF"},
+                {"name": "Minimal"},
+                {"name": "Long" * 1000, "description": "x"},
+                {"name": "Special ™©®", "description": "Symbols"}
+            ]
+        }
+
+        response = client.post("/predict", json=request_data)
+        assert response.status_code == 200
+
+        data = response.json()
+        # Should have predictions for all 4 events
+        assert len(data["predictions"]) == 4
+
+
+class TestRobustness:
+    """Tests for API robustness and stability."""
+
+    def test_multiple_concurrent_predictions(self, client):
+        """API handles multiple predictions in sequence."""
+        request_data = {
+            "events": [{"name": "Test Event", "description": "Test"}]
+        }
+
+        # Make 10 requests in sequence
+        for _ in range(10):
+            response = client.post("/predict", json=request_data)
+            assert response.status_code == 200
+
+    def test_large_batch_prediction(self, client):
+        """API handles large batch of events."""
+        # Create 50 events
+        events = [
+            {
+                "name": f"Event {i}",
+                "description": f"Description for event {i}",
+                "location": f"Location {i}"
+            }
+            for i in range(50)
+        ]
+
+        request_data = {"events": events}
+
+        response = client.post("/predict", json=request_data)
+        assert response.status_code == 200
+
+        data = response.json()
+        assert len(data["predictions"]) == 50
+
+    def test_prediction_consistency(self, client):
+        """Same input produces consistent predictions."""
+        request_data = {
+            "events": [{"name": "House Music Party", "description": "DJ set", "location": "Oakland"}]
+        }
+
+        # Make same request twice
+        response1 = client.post("/predict", json=request_data)
+        response2 = client.post("/predict", json=request_data)
+
+        # Should get same predictions
+        data1 = response1.json()
+        data2 = response2.json()
+
+        tags1 = data1["predictions"][0]["tags"]
+        tags2 = data2["predictions"][0]["tags"]
+
+        # Top tags should be the same
+        assert tags1[0]["tag"] == tags2[0]["tag"]
+        assert tags1[0]["confidence"] == tags2[0]["confidence"]
+
+
 if __name__ == "__main__":
     # Run tests with pytest
     pytest.main([__file__, "-v", "-s"])

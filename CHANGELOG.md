@@ -7,7 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## 2025-10-18 0.0.9
+## 2025-10-20 0.1.0
+
+-   MVP 0.1 Done. Documentation updated to summarize MVP
+-   Added: `docs/TEST_COVERAGE_PLAN.md` - Coverage analysis
+	-   New: `tests/test_model.py` - 14 model architecture tests
+	-   Extended: `tests/test_preprocess.py` - 10 edge case tests
+	-   Extended: `tests/test_serve.py` - 11 error handling tests
+-   Fixed: Removed deprecated `input_length` from Embedding layer (14 fewer warnings)
+
+## 2025-10-20 0.0.9
 
 ### Implementation
 
@@ -25,9 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   Complete model performance section with all metrics
 -   Docker and Render deployment instructions
 
----
-
-## 2025-10-18 0.0.8
+## 2025-10-20 0.0.8
 
 -   Phase 7 fixes for render.com docker deployment
 
